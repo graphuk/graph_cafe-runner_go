@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/graph-uk/cafe-runner/data/repositories"
+	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
 
 	"github.com/asdine/storm"
 )

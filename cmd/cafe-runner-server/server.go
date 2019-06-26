@@ -7,17 +7,17 @@ import (
 
 	"github.com/asdine/storm"
 	"github.com/gobuffalo/packr"
-	"github.com/graph-uk/cafe-runner/api/runs"
-	"github.com/graph-uk/cafe-runner/api/sessions"
+	"github.com/graph-uk/graph_cafe-runner_go/api/runs"
+	"github.com/graph-uk/graph_cafe-runner_go/api/sessions"
 
 	//"github.com/labstack/echo/middleware"
 
-	"github.com/graph-uk/cafe-runner/api/testpacks"
-	"github.com/graph-uk/cafe-runner/data/models"
-	webhome "github.com/graph-uk/cafe-runner/web/home"
-	webruns "github.com/graph-uk/cafe-runner/web/runs"
-	websessions "github.com/graph-uk/cafe-runner/web/sessions"
-	webtestpacks "github.com/graph-uk/cafe-runner/web/testpacks"
+	"github.com/graph-uk/graph_cafe-runner_go/api/testpacks"
+	"github.com/graph-uk/graph_cafe-runner_go/data/models"
+	webhome "github.com/graph-uk/graph_cafe-runner_go/web/home"
+	webruns "github.com/graph-uk/graph_cafe-runner_go/web/runs"
+	websessions "github.com/graph-uk/graph_cafe-runner_go/web/sessions"
+	webtestpacks "github.com/graph-uk/graph_cafe-runner_go/web/testpacks"
 
 	"github.com/labstack/echo"
 )

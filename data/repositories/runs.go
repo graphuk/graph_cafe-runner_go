@@ -6,7 +6,7 @@ import (
 
 	"github.com/asdine/storm"
 
-	"github.com/graph-uk/cafe-runner/data/models"
+	"github.com/graph-uk/graph_cafe-runner_go/data/models"
 )
 
 type Runs struct {

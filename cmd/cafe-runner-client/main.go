@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/graph-uk/cafe-runner/logic/utils"
+	"github.com/graph-uk/graph_cafe-runner_go/logic/utils"
 )
 
 func compressTestpack() (string, error) {

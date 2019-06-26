@@ -9,10 +9,10 @@ import (
 	"strconv"
 
 	"github.com/asdine/storm"
-	"github.com/graph-uk/cafe-runner/data"
-	"github.com/graph-uk/cafe-runner/data/models"
-	"github.com/graph-uk/cafe-runner/data/repositories"
-	"github.com/graph-uk/cafe-runner/logic/utils"
+	"github.com/graph-uk/graph_cafe-runner_go/data"
+	"github.com/graph-uk/graph_cafe-runner_go/data/models"
+	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
+	"github.com/graph-uk/graph_cafe-runner_go/logic/utils"
 )
 
 const testpackArchivePathTemplate = "_data/testpacks/%d.zip"

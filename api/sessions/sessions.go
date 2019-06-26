@@ -7,8 +7,8 @@ import (
 
 	"github.com/asdine/storm"
 
-	"github.com/graph-uk/cafe-runner/api/sessions/models"
-	"github.com/graph-uk/cafe-runner/logic/services"
+	"github.com/graph-uk/graph_cafe-runner_go/api/sessions/models"
+	"github.com/graph-uk/graph_cafe-runner_go/logic/services"
 
 	"github.com/labstack/echo"
 )

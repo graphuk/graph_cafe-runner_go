@@ -82,7 +82,7 @@ func main() {
 	server.WaitingForStdErrContains(`Run for session 1 created with id: 1`, time.Second*10)
 	server.WaitingForStdErrContains(`Run 1. Init started.`, time.Second*10)
 	server.WaitingForStdErrContains(`Get run received.`, time.Second*10)
-	server.WaitingForStdErrContains(`Run 1: free ports -`, time.Second*30)
+	server.WaitingForStdErrContains(`Run 1: free ports -`, time.Second*70)
 	server.WaitingForStdErrContains(`remote test1.js --hostname localhost --ports`, time.Second*10)
 	server.WaitingForStdErrContains(`Run 1. Init finished. Connect for testing.`, time.Second*10)
 	server.WaitingForStdErrContains(`Run 1. Cafe thread finished with exitCode 0`, time.Second*60)

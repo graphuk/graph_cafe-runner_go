@@ -4,9 +4,9 @@ import (
 	"strconv"
 
 	"github.com/asdine/storm"
-	"github.com/graph-uk/cafe-runner/data"
-	"github.com/graph-uk/cafe-runner/data/models"
-	"github.com/graph-uk/cafe-runner/data/repositories"
+	"github.com/graph-uk/graph_cafe-runner_go/data"
+	"github.com/graph-uk/graph_cafe-runner_go/data/models"
+	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
 )
 
 type Session struct {

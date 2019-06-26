@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/asdine/storm"
-	"github.com/graph-uk/cafe-runner/data/repositories"
+	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
 	"github.com/labstack/echo"
 )
 

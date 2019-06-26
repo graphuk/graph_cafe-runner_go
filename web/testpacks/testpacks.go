@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/asdine/storm"
-	"github.com/graph-uk/cafe-runner/web/testpacks/models"
+	"github.com/graph-uk/graph_cafe-runner_go/web/testpacks/models"
 
 	"github.com/labstack/echo"
 )
