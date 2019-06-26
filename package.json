@@ -1,0 +1,23 @@
+{
+  "name": "cafe-runner",
+  "version": "1.0.0",
+  "description": "A tool for run TestCafe tests on devices by link, and collect results.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "alexander.eliseev",
+  "license": "ISC",
+  "dependencies": {
+    "combat-win": "^1.0.0",
+    "concurrently": "^4.1.1",
+    "curl-win": "^1.0.0",
+    "go-win": "^1.0.0",
+    "liteide": "^1.0.0",
+    "packr-win": "^1.0.0",
+    "upx-win": "^1.0.0"
+  }
+}

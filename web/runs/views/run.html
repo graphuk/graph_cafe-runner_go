@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<style>
+/*			body {background-color: powderblue;}
+			h1   {color: blue;}
+			p    {color: red;}*/
+			.lineContainer {display:flex;}
+
+		</style>
+		<script type="text/javascript">
+			var updateTimeout;
+
+			function proceed () {
+			    //alert("hello");
+			    var xhr = new XMLHttpRequest();
+				xhr.open("POST", "/api/v1/runs", true);
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.onload = function () {
+					// do something to response
+					console.log(this.responseText);
+				};
+				
+				xhr.send(JSON.stringify({
+				    SessionId: 1,
+				    DeviceOwnerName: "testOwner"
+				}));
+				if (xhr.status != 200) {
+					// обработать ошибку
+					alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+				} else {
+					// вывести результат
+					alert( xhr.responseText ); // responseText -- текст ответа.
+				}
+				//alert(xhr.status);
+			}
+
+			function updateRunStatus(){
+				var xhr = new XMLHttpRequest();
+				// we defined the xhr
+
+				xhr.onreadystatechange = function () {
+					if (this.readyState != 4) return;
+
+					if (this.status == 200) {
+						var data = JSON.parse(this.responseText);
+						console.log(data);
+
+						document.getElementById("runStatus").innerHTML = data.Status;
+						if (data.Status==8 ) {
+							// var win = window.open("http://localhost:"+data.Port+"/browser/connect", '_blank');
+							// win.focus();
+							clearTimeout(updateTimeout);
+							window.location.href="http://localhost:"+data.Port+"/browser/connect";
+						} else {
+							if (data.Status>8 ) {
+								clearTimeout(updateTimeout);
+							}
+						}
+						//console.log("upd");
+						//clearTimeout(updateTimeout);
+						// we get the returned data
+					}
+					// end of state change: it can be after some time (async)
+				};
+
+				xhr.open('GET', "/api/v1/runs/{{.ID}}", true);
+				xhr.send();
+			}
+
+			function runWatchers() {
+				updateTimeout = setInterval(updateRunStatus, 5000);
+			}
+		</script>
+	</head>
+	<body onload="runWatchers();">
+		Results of run {{.ID}}.<br>
+		<div class="lineContainer">Status: <div id="runStatus">{{.Status}}</div> </div>
+		<div class="lineContainer">ExitCode: {{.ExitCode}} </div>
+		StdOut: {{.StdOut}}
+	</body>
+</html>

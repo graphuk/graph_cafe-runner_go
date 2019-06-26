@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+<script type="text/javascript">
+			function proceedStartButton () {
+				var xhr = new XMLHttpRequest();
+				// we defined the xhr
+				xhr.onreadystatechange = function () {
+					//if (this.readyState != 4) return;
+
+					if (this.status == 201) {
+						var data = JSON.parse(this.responseText);
+						console.log(data);
+						window.location.href = "/sessions/"+data.ID;
+					}else{
+						console.log(this.status);
+						console.log(this.data);
+					}
+				};
+
+				xhr.open('POST', "/api/v1/sessions", true);
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.send(JSON.stringify({
+				    TestpackId: {{.ID}}
+				}));
+			}
+
+			function onload() {
+				nameValue = getCookie("name");
+				if (nameValue!=undefined){
+					document.getElementById('InputName').value = nameValue; 
+				}
+				proceedNameInput();
+			}
+
+			function proceedNameInput() {
+				var inputVal = document.getElementById('InputName').value;
+				if (inputVal.length>2){
+					document.getElementById('ButtonStart').removeAttribute("disabled");
+				}else{
+					document.getElementById('ButtonStart').setAttribute("disabled", "disabled");
+				}
+				setCookie("name",inputVal);
+			}			
+		</script>
+	</head>
+	<body>
+		Sessions of testpack {{.ID}}:<br>
+		{{range .Sessions}}
+		<a href="/sessions/{{.ID}}">{{.ID}} {{.CreatedTime}}</a> <br>		
+		{{end}}
+		<button id="ButtonCreateSession" type="button" onclick="proceedStartButton();">AddSession</button>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+	</head>
+	<body>
+		Testpacks:<br>
+		{{range .Tesptacks}}
+		<a href="/testpacks/{{.ID}}">{{.ID}} {{.UploadTime}}</a> <br>		
+		{{end}}
+	</body>
+</html>
