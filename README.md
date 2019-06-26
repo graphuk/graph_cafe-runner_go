@@ -10,8 +10,8 @@ A server that provides [TestCafe](https://github.com/DevExpress/testcafe "TestCa
 - Requirements: windows, git, nodejs, chrome.
 - Go to the folder you want to host the project.
 - Check the folder's path has no Cyrillic chars, or spaces
-- Run `mkdir src\github.com && cd src\github.com && git clone https://github.com/graphuk/graph_cafe-runner_go.git`
-- Go to `src\github.com\graph_cafe-runner_go`, run `npm install`
+- Run `mkdir src\github.com\graph-uk && cd src\github.com\graph-uk && git clone https://github.com/graphuk/graph_cafe-runner_go.git`
+- Run `cd graph_cafe-runner_go && npm install`
 - Run `buildDevAndTestIntegration.cmd` and then `buildReleaseAndTestIntegration.cmd` to make sure build works
 - Make feature-branch
 - Make your improves, add tests, and run buildDevAndTestIntegration.cmd. If tests passed - push your feature-branch, and merge to master.
