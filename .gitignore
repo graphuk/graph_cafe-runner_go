@@ -34,3 +34,4 @@ _ReSharper*/
 /cmd/cafe-runner-server/cafe-runner-server
 /web/assets
 /cmd/cafe-runner-server/_data/
+/cmd/cafe-runner-server/config.yml
