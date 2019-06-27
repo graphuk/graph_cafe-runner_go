@@ -11,9 +11,10 @@ type runModel struct {
 	Status   int
 	ExitCode string
 	StdOut   string
+	Hostname *string
 }
 
-func NewRunModel(DB *storm.DB, runID int) *runModel {
+func NewRunModel(DB *storm.DB, runID int, Hostname *string) *runModel {
 	res := &runModel{}
 
 	run := (&repositories.Runs{DB}).Find(runID)
@@ -21,6 +22,7 @@ func NewRunModel(DB *storm.DB, runID int) *runModel {
 	res.Status = int(run.Status)
 	res.ExitCode = run.ExitCode
 	res.StdOut = string(run.StdOut)
+	res.Hostname = Hostname
 
 	return res
 }

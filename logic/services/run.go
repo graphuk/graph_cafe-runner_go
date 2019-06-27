@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/asdine/storm"
+	"github.com/graph-uk/graph_cafe-runner_go/cmd/cafe-runner-server/config"
 	"github.com/graph-uk/graph_cafe-runner_go/data"
 	"github.com/graph-uk/graph_cafe-runner_go/data/models"
 	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
@@ -18,7 +19,8 @@ import (
 const runPathTemplate = "_data/runs/%d"
 
 type Run struct {
-	Tx storm.Node
+	Tx               storm.Node
+	CafeRunnerConfig *config.Configuration
 }
 
 func (t *Run) Create(SessionID int, DeviceOwnerName string) *models.Run {
@@ -80,14 +82,14 @@ func (t *Run) copyTestpack(RunID int) {
 }
 
 func (t *Run) runCafeThread(RunID int) {
-	freePort1, freePort2 := utils.GetFirstFreeLocalPorts(21000, 21010)
+	freePort1, freePort2 := utils.GetFirstFreeLocalPorts(t.CafeRunnerConfig.Server.Cafe.LowPort, t.CafeRunnerConfig.Server.Cafe.HighPort)
 	log.Println(`Run ` + strconv.Itoa(RunID) + `: free ports - ` + strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2))
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
 
 	pwd, err := os.Getwd()
 	check(err)
 
-	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/testcafe/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, `localhost`, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath+`/testcafe`, os.Environ())
+	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/testcafe/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, t.CafeRunnerConfig.Server.Hostname, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath+`/testcafe`, os.Environ())
 
 	if err != nil {
 		log.Println(`Failed to start cafe thread` + strconv.Itoa(RunID))

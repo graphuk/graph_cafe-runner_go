@@ -1,6 +1,13 @@
 package main
 
+import (
+	"github.com/graph-uk/graph_cafe-runner_go/cmd/cafe-runner-server/config"
+)
+
 func main() {
-	cafeRunnerServer := &CafeRunnerServer{}
-	cafeRunnerServer.Start(3133)
+	cafeRunnerConfig := config.GetConfiguration()
+	cafeRunnerConfig.PrintToLog()
+
+	cafeRunnerServer := &CafeRunnerServer{cafeRunnerConfig}
+	cafeRunnerServer.Start()
 }
