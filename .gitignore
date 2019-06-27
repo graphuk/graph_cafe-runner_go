@@ -33,3 +33,4 @@ _ReSharper*/
 /cmd/cafe-runner-client/cafe-runner-client
 /cmd/cafe-runner-server/cafe-runner-server
 /web/assets
+/cmd/cafe-runner-server/_data/
