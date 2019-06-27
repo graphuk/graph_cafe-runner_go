@@ -48,10 +48,10 @@
 
 						document.getElementById("runStatus").innerHTML = data.Status;
 						if (data.Status==8 ) {
-							// var win = window.open("http://localhost:"+data.Port+"/browser/connect", '_blank');
+							// var win = window.open("http://{{.Hostname}}:"+data.Port+"/browser/connect", '_blank');
 							// win.focus();
 							clearTimeout(updateTimeout);
-							window.location.href="http://localhost:"+data.Port+"/browser/connect";
+							window.location.href="http://{{.Hostname}}:"+data.Port+"/browser/connect";
 						} else {
 							if (data.Status>8 ) {
 								clearTimeout(updateTimeout);

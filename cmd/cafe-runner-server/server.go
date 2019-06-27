@@ -9,6 +9,7 @@ import (
 	"github.com/gobuffalo/packr"
 	"github.com/graph-uk/graph_cafe-runner_go/api/runs"
 	"github.com/graph-uk/graph_cafe-runner_go/api/sessions"
+	"github.com/graph-uk/graph_cafe-runner_go/cmd/cafe-runner-server/config"
 
 	//"github.com/labstack/echo/middleware"
 
@@ -23,6 +24,7 @@ import (
 )
 
 type CafeRunnerServer struct {
+	config *config.Configuration
 }
 
 func check(err error) {
@@ -31,7 +33,8 @@ func check(err error) {
 	}
 }
 
-func (t *CafeRunnerServer) initFolders() {
+func (t *CafeRunnerServer) initFolders(datapath string) {
+	check(os.Chdir(datapath))
 	check(os.MkdirAll(`_data`, 0644))
 	check(os.MkdirAll(`_data`+string(os.PathSeparator)+`testpacks`, 0644))
 	check(os.MkdirAll(`_data`+string(os.PathSeparator)+`runs`, 0644))
@@ -59,8 +62,8 @@ func (t *CafeRunnerServer) initDB(db *storm.DB) {
 }
 
 // Start web server
-func (t *CafeRunnerServer) Start(port int) {
-	t.initFolders()
+func (t *CafeRunnerServer) Start() {
+	t.initFolders(t.config.Data.Path)
 
 	db := t.openDB(`_data/base.db`)
 	defer db.Close()
@@ -82,12 +85,13 @@ func (t *CafeRunnerServer) Start(port int) {
 	e.GET("/testpacks", (&webtestpacks.Handler{db}).TestpacksList)
 	e.GET("/testpacks/:id", (&webtestpacks.Handler{db}).Testpack)
 	e.GET("/sessions/:id", (&websessions.Handler{db}).Session)
-	e.GET("/runs/:id", (&webruns.Handler{db}).Run)
+	e.GET("/runs/:id", (&webruns.Handler{db, &t.config.Server.Hostname}).Run)
 
 	//api
 	e.POST("/api/v1/testpacks", (&testpacks.Handler{db}).Post)
 	e.POST("/api/v1/sessions", (&sessions.Handler{db}).Post)
-	e.POST("/api/v1/runs", (&runs.Handler{db}).Post)
-	e.GET("/api/v1/runs/:id", (&runs.Handler{db}).Get)
-	e.Logger.Fatal(e.Start(":" + strconv.Itoa(port)))
+	e.POST("/api/v1/runs", (&runs.Handler{db, t.config}).Post)
+	e.GET("/api/v1/runs/:id", (&runs.Handler{db, t.config}).Get)
+
+	e.Logger.Fatal(e.Start(":" + strconv.Itoa(t.config.Server.Port)))
 }
