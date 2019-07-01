@@ -8,11 +8,13 @@ set GOROOT=%REPO%\node_modules\go-win
 
 set COMBATPATH=%REPO%\node_modules\combat-win
 set CURLPATH=%REPO%\node_modules\curl-win
+set CHROMEPATH=%REPO%\node_modules\chrome-portable-win
 
 set PATH=%PATH%;%GOROOT%\bin
 set PATH=%PATH%;%GOPATH%\bin
 set PATH=%PATH%;%COMBATPATH%
 set PATH=%PATH%;%CURLPATH%
+set PATH=%PATH%;%CHROMEPATH%
 
 @echo on
 
@@ -23,7 +25,7 @@ xcopy %REPO%\cmd\cafe-runner-server\cafe-runner-server.exe %REPO%\tests\integrat
 cd %REPO%\tests\integration\combat\src\tests
 combat run -HostName=localhost:3133
 
-Choice /T 10 /D n /M "Do you want stop process and read results? Auto-continue after 10 sec."
+Choice /T 10 /D N /M "Do you want stop process and read results? Auto-continue after 10 sec."
 
 @echo off
 If Errorlevel 2 Goto No
