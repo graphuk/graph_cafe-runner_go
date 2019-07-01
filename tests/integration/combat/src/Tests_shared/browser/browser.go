@@ -87,7 +87,7 @@ func NewBrowser() *Browser {
 	execAllocator := []chromedp.ExecAllocatorOption{
 		chromedp.NoFirstRun,
 		chromedp.NoDefaultBrowserCheck,
-		//chromedp.Headless,
+		chromedp.Headless,
 
 		// After Puppeteer's default behavior.
 		chromedp.Flag("disable-background-networking", true),
@@ -98,7 +98,7 @@ func NewBrowser() *Browser {
 		chromedp.Flag("disable-client-side-phishing-detection", true),
 		chromedp.Flag("disable-default-apps", true),
 		chromedp.Flag("disable-dev-shm-usage", true),
-		//chromedp.Flag("disable-extensions", true),
+		chromedp.Flag("disable-extensions", true),
 		chromedp.Flag("disable-features", "site-per-process,TranslateUI,BlinkGenPropertyTrees"),
 		chromedp.Flag("disable-hang-monitor", true),
 		chromedp.Flag("disable-ipc-flooding-protection", true),
@@ -112,12 +112,6 @@ func NewBrowser() *Browser {
 		chromedp.Flag("enable-automation", true),
 		chromedp.Flag("password-store", "basic"),
 		chromedp.Flag("use-mock-keychain", true),
-		//chromedp.Flag("user-data-dir", dataDir),
-		//chromedp.Flag("load-extension", `"`+dataDir+`\uVPN - free and unlimited Chrome VPN.crx"`), //strange way to chrome binary
-		//chromedp.Flag("disable-extensions-file-access-check", true),
-		//chromedp.Flag("allow-legacy-extension-manifests", true),
-		//--disable-extensions-file-access-check --
-		//chromedp.Flag("load-extension", `vpn`),
 	}
 
 	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), execAllocator...)
