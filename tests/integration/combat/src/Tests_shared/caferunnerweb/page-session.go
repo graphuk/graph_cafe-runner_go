@@ -10,7 +10,7 @@ type PageSession struct {
 
 func NewOpenPageSession(bro *browser.Browser) *PageSession {
 	res := PageSession{bro}
-	res.Bro.Get(`localhost:3133`)
+	res.Bro.Get(`http://localhost:3133`)
 	return &res
 }
 

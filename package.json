@@ -12,6 +12,7 @@
   "author": "alexander.eliseev",
   "license": "ISC",
   "dependencies": {
+    "chrome-portable-win": "^1.0.0",
     "combat-win": "^1.0.0",
     "concurrently": "^4.1.1",
     "curl-win": "^1.0.0",
