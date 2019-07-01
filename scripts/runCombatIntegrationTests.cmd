@@ -8,7 +8,7 @@ set GOROOT=%REPO%\node_modules\go-win
 
 set COMBATPATH=%REPO%\node_modules\combat-win
 set CURLPATH=%REPO%\node_modules\curl-win
-set CHROMEPATH=%REPO%\node_modules\chrome-portable-win
+set CHROMEPATH=%REPO%\node_modules\chrome-portable-win\App\Chrome-bin
 
 set PATH=%PATH%;%GOROOT%\bin
 set PATH=%PATH%;%GOPATH%\bin
