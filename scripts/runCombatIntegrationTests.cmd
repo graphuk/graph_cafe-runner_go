@@ -28,4 +28,4 @@ combat run -HostName=localhost:3133
 IF "%USERPROFILE%" == "C:\Users\jenkins" GOTO EXIT
 pause
 
-EXIT:
+:EXIT
