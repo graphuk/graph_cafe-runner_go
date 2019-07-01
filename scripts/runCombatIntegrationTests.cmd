@@ -25,17 +25,7 @@ xcopy %REPO%\cmd\cafe-runner-server\cafe-runner-server.exe %REPO%\tests\integrat
 cd %REPO%\tests\integration\combat\src\tests
 combat run -HostName=localhost:3133
 
-Choice /T 10 /D N /M "Do you want stop process and read results? Auto-continue after 10 sec."
-
-@echo off
-If Errorlevel 2 Goto No
-If Errorlevel 1 Goto Yes
-Goto End
-@echo on
-
-:No
-Goto End
-
-:Yes
+IF "%USERPROFILE%" == "C:\Users\jenkins" GOTO EXIT
 pause
-:End
+
+EXIT:
