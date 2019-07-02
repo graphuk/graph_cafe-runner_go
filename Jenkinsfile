@@ -8,17 +8,22 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   stages {
-    when {
-      anyOf {
-        branch 'master';
-      }
-    }
     stage('BuildAndTest') {
+      when {
+        anyOf {
+          branch 'master';
+        }
+      }
       steps {
         bat 'dir'
       }
     }
     stage('Test') {
+      when {
+        anyOf {
+          branch 'master';
+        }
+      }
       steps {
         bat 'node --version'
       }
