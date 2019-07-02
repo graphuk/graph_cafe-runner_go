@@ -20,8 +20,9 @@ pipeline {
         bat 'mklink /D src\\github.com\\graph-uk\\graph_cafe-runner_go %CD%'
         dir('src\\github.com\\graph-uk\\graph_cafe-runner_go') {
           subst{
-            echo 'npm install'
             echo 'buildReleaseAndTestIntegration.cmd'
+            bat 'dir'
+            bat 'node --version'
           }
         }
       }
