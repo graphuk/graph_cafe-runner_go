@@ -8,6 +8,11 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   stages {
+    when {
+      anyOf {
+        branch 'master';
+      }
+    }
     stage('BuildAndTest') {
       steps {
         bat 'dir'
