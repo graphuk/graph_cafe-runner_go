@@ -15,13 +15,13 @@ pipeline {
         }
       }
       steps {
+        bat 'cmd.exe /c rd /s /q src'
         bat 'mkdir src\\github.com\\graph-uk'
         bat 'mklink /D src\\github.com\\graph-uk\\graph_cafe-runner_go %CD%'
         dir('src\\github.com\\graph-uk\\graph_cafe-runner_go') {
           bat 'npm install'
           bat 'buildReleaseAndTestIntegration.cmd'
         }
-        bat 'rd src\\github.com\\graph-uk\\graph_cafe-runner_go'
       }
     }
     stage('Test') {
