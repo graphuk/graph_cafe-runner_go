@@ -15,13 +15,9 @@ pipeline {
         }
       }
       steps {
-        bat 'IF EXIST src rd /s /q src'
-        bat 'mkdir src\\github.com\\graph-uk'
-        bat 'mklink /D src\\github.com\\graph-uk\\graph_cafe-runner_go %CD%'
-        dir('src\\github.com\\graph-uk\\graph_cafe-runner_go') {
-          subst{
-            bat 'dir'
-          }
+        dir('scripts') {
+          bat 'buildInJenkins.stage1.cmd'
+          bat 'buildInJenkins.stage2.cmd'
         }
       }
     }
