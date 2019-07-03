@@ -13,7 +13,7 @@ node('che-windows-02') {
           dir('scripts') {
             bat 'buildInJenkins.stage1.cmd'
             bat 'buildInJenkins.stage2.cmd'
-            bat "buildInJenkins.stage3.cmd ${PROJECT_VERSION}"
+            bat "buildInJenkins.stage3.cmd ${PROJECT_VERSION} ${env.GITHUB_TOKEN}"
         }
       }
     }
