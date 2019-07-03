@@ -21,15 +21,5 @@ pipeline {
         }
       }
     }
-    stage('Test') {
-      when {
-        anyOf {
-          branch 'master';
-        }
-      }
-      steps {
-        bat 'node --version'
-      }
-    }
   }
 }
