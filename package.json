@@ -17,6 +17,7 @@
     "concurrently": "^4.1.1",
     "curl-win": "^1.0.0",
     "go-win": "^1.0.0",
+    "hub-win": "^1.0.0",
     "liteide": "^1.0.0",
     "packr-win": "^1.0.0",
     "upx-win": "^1.0.0"
