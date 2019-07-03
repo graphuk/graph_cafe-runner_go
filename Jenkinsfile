@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-def PROJECT_VERSION = "0.0.${BUILD_NUMBER}"
+def PROJECT_VERSION = "v0.0.${BUILD_NUMBER}"
 
 pipeline {
   agent { label 'windows-dockerized' }
@@ -18,6 +18,7 @@ pipeline {
         dir('scripts') {
           bat 'buildInJenkins.stage1.cmd'
           bat 'buildInJenkins.stage2.cmd'
+          bat "buildInJenkins.stage3.cmd ${PROJECT_VERSION}"
         }
       }
     }
