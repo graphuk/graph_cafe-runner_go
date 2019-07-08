@@ -39,7 +39,8 @@ func main() {
 	json := fmt.Sprintf("{\"Content\": \"%s\"}", content)
 	body := bytes.NewBuffer([]byte(json))
 
-	resp, err := http.Post(`http://127.0.0.1:3133/api/v1/testpacks`, "application/json", body)
+	serverAddress := os.Args[1]
+	resp, err := http.Post(serverAddress+`/api/v1/testpacks`, "application/json", body)
 	if err != nil {
 		panic(err)
 	}
