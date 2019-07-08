@@ -2,10 +2,12 @@ package services
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"runtime/debug"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/asdine/storm"
@@ -66,6 +68,19 @@ func (t *Run) npmInstall(RunID int) {
 	//t.updateStatus(RunID, models.TPStatusInitProgress, models.TPStatusReadyForRunning)
 }
 
+//let's method "isMyHostname" always return true
+//otherwise, in docker, testcafe failed with message
+//ERROR The specified "<someIP>" hostname cannot be resolved to the current machine.
+//that's due to isMyHostname run server at random port (not forwarded to container), and cannot connect to itself.
+func (t *Run) hackEndpointUtils(RunID int) {
+	runPath := fmt.Sprintf(runPathTemplate, RunID)
+	contentBytes, err := ioutil.ReadFile(runPath + `/testcafe/node_modules/endpoint-utils/index.js`)
+	check(err)
+	contentString := string(contentBytes)
+	contentString = strings.Replace(contentString, `    return getFreePort()`, `    return true; return getFreePort()`, -1)
+	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/endpoint-utils/index.js`, []byte(contentString), 644))
+}
+
 func (t *Run) copyTestpack(RunID int) {
 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
 	run := (&repositories.Runs{t.Tx}).Find(RunID)
@@ -114,6 +129,7 @@ func (t *Run) RunInitSteps(RunID int) {
 	log.Println(`Run ` + strconv.Itoa(RunID) + `. Init started.`)
 	t.copyTestpack(RunID)
 	t.npmInstall(RunID)
+	t.hackEndpointUtils(RunID)
 	t.runCafeThread(RunID)
 	log.Println(`Run ` + strconv.Itoa(RunID) + `. Init finished. Connect for testing.`)
 }
