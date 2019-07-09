@@ -8,6 +8,7 @@ def PROJECT_VERSION = "v0.0.${BUILD_NUMBER}"
 
 node('che-windows-02') {
   try {
+      checkout scm
       subst{
         stage ('build') {
           dir('scripts') {
@@ -16,6 +17,9 @@ node('che-windows-02') {
             bat 'buildInJenkins.stage2.cmd'
             bat "buildInJenkins.stage3.cmd ${PROJECT_VERSION} ${env.GITHUB_TOKEN}"
         }
+      }
+      stage ('Starting deploy job') {
+          build job: 'graph-cafe-runner-deploy', wait: false
       }
     }
   }
