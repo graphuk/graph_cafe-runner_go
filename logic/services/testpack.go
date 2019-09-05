@@ -108,7 +108,7 @@ func (t *Testpack) updateStatus(TestpackID int, statusFrom, statusTo uint8) {
 // 	unitOfWork.ExecuteCommand(command)
 // }
 
-func (t *Testpack) CopyToFolder(TestpackID int, targetFolder string) error {
-	testpackPathUnarchived := fmt.Sprintf(testpackUnarchivedPathTemplate, TestpackID)
+func (t *Testpack) CopyToFolder(targetFolder string) error {
+	testpackPathUnarchived := fmt.Sprintf(testpackUnarchivedPathTemplate)
 	return utils.CopyDir(testpackPathUnarchived, targetFolder)
 }

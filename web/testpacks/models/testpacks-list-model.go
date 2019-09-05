@@ -33,7 +33,7 @@ func NewTestpacksListModel(DB *storm.DB) *testpacksListModel {
 	now := time.Now()
 	allTestpacks := (&repositories.Testpacks{DB}).FindAll()
 	for _, curTestpack := range *allTestpacks {
-		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)}) //curTestpack.UploadTime})
+		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)})
 	}
 	return res
 }

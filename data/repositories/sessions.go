@@ -19,9 +19,8 @@ func check(err error) {
 	}
 }
 
-func (t *Sessions) Create(testpackID int) *models.Session {
+func (t *Sessions) Create() *models.Session {
 	session := &models.Session{
-		TestpackID:  testpackID,
 		CreatedTime: time.Now(),
 	}
 

@@ -83,11 +83,11 @@ func (t *Run) hackEndpointUtils(RunID int) {
 
 func (t *Run) copyTestpack(RunID int) {
 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
-	run := (&repositories.Runs{t.Tx}).Find(RunID)
-	session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
+	//	run := (&repositories.Runs{t.Tx}).Find(RunID)
+	//	session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
 
-	err := (&Testpack{t.Tx}).CopyToFolder(session.TestpackID, runPath)
+	err := (&Testpack{t.Tx}).CopyToFolder(runPath)
 	if err != nil { // if copying failed
 		t.markAsCopyTestpackFailed(RunID, err)
 	} else { //if copying succeed

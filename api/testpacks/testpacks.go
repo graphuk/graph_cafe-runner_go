@@ -31,9 +31,16 @@ func (t *Handler) Post(c echo.Context) error {
 	log.Println(`Post testpack received.`)
 
 	model := &testpacks.TestpackPostModel{}
-	check(c.Bind(&model))
+	if err := c.Bind(&model); err != nil {
+		log.Println(err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
 	testpackContent, err := base64.StdEncoding.DecodeString(model.Content)
-	check(err)
+	if err != nil {
+		log.Println(err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
 
 	res := (&repositories.Testpacks{t.DB}).Create(&testpackContent)
 	log.Println(`Testpack created with id: ` + strconv.Itoa(res.ID))
