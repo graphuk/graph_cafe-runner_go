@@ -1,11 +1,124 @@
 <!DOCTYPE html>
 <html lang="en-US">
-	<head>
-	</head>
-	<body>
-		Testpacks:<br>
-		{{range .Tesptacks}}
-		<a href="/testpacks/{{.ID}}">{{.ID}} {{.UploadTime}}</a> <br>		
-		{{end}}
-	</body>
-</html>
+
+<head>
+    <title>Combat monitor</title>
+	  <link href="/bindata/jquery.bxslider/jquery.bxslider.css" rel="stylesheet">
+    <style>
+        .rTable {
+            display: table;
+            width: 100%;
+        }
+        
+        .rTableRow {
+            display: table-row;
+        }
+        
+        .rTableStatusGreen {
+            background-color: green;
+        }
+        
+        .rTableStatusRed {
+            background-color: red;
+        }
+        
+        .rTableStatusYellow {
+            background-color: yellow;
+        }		
+		
+		.rTableStatusWhite {
+            background-color: white;
+        }
+		
+        .rTableStatusGrey {
+            background-color: grey;
+        }
+		
+        .rTableStatusProgress {
+            background-color: #99ff99;
+        }
+        
+        .rTableHeading {
+            background-color: #ddd;
+            display: table-header-group;
+        }
+        
+        .rTableStatusCell {
+            display: table-cell;
+            padding: 3px 10px;
+            border: 1px solid #999999;
+            width: 10px
+        }
+        
+        .rTableCell,
+        .rTableHead {
+            display: table-cell;
+            padding: 3px 10px;
+            border: 1px solid #999999;
+        }
+        
+        .rTableHeading {
+            display: table-header-group;
+            background-color: #ddd;
+            font-weight: bold;
+        }
+        
+        .rTableFoot {
+            display: table-footer-group;
+            font-weight: bold;
+            background-color: #ddd;
+        }
+        
+        .rTableBody {
+            display: table-row-group;
+        }
+        
+        .input-button {
+            width: 100%;
+            text-align: left;
+            background-color: #FFffff;
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border: 1px solid #ccc;
+            font-weight: bolder;
+            color: #000;
+            margin: 0 auto;
+            padding: 5px;
+        }
+        
+        .spoil {}
+        
+        .smallfont {}
+        
+        .alt2 {}
+		
+    </style>
+</head>
+
+<body>
+    <div class="rTableHeading">
+	    <div class="rTableRow">
+	        <div class="rTableCell"><a href='/runs'>Run tests</a></div>
+	       	<div class="rTableCell"><a href='/projects'>Results</a></div>
+			    <div class="rTableCell rTableStatusWhite"><a href='/testpacks'>Test packs</a></div>
+	    </div>
+    </div>
+    <h2>Testpacks</h2>
+		<div class="rTableHeading">
+	    <div class="rTableRow">
+	      <div class="rTableCell">ID</div>
+        <div class="rTableCell">Time ago</div>
+	    </div>
+    </div>
+		<div class="rTableBody">
+  		{{range .Tesptacks}}
+      <div class="rTableRow">
+        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.ID}}</a></div>
+        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.UploadTime}}</a></div>
+      </div>
+  		{{end}}
+	  </div>							
+</body>
+
+</html>	
