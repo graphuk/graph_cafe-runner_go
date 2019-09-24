@@ -145,9 +145,11 @@
         <div class="rTableRow">
           <div class="rTableCell">{{.User}}</div>
           {{range .Results}}
-            {{$cellStatusColorClass := ""}}
-            {{with (eq .Status 1)}} {{$cellStatusColorClass = " rTableStatusProgress"}} {{end}}
-            <div class="rTableCell{{$cellStatusColorClass}}">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+            {{if eq .Status 1}}
+              <div class="rTableCell rTableStatusProgress">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+            {{else}}
+               <div class="rTableCell"></div>
+            {{end}}
       		{{end}}
           <div class="rTableCell"></div>
         </div>
