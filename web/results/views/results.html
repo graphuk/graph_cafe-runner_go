@@ -94,31 +94,67 @@
         .alt2 {}
 		
     </style>
+
+		<script type="text/javascript">
+			function proceedAddSessionLink () {
+
+        var xhr = new XMLHttpRequest();
+				// we defined the xhr
+				xhr.onreadystatechange = function () {
+					if (this.readyState != 4) return;
+
+					if (this.status == 201) {
+						//var data = JSON.parse(this.responseText);
+						//console.log(data);
+						//window.location.href = "/runs/"+data.ID;
+					}else{
+						console.log(this.status);
+						console.log(this.data);
+					}
+				};
+
+				xhr.open('POST', "/api/v1/sessions", true);
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.send(JSON.stringify({}));
+			}
+		</script> 
 </head>
 
-<body>
+<body onload="onload();">
     <div class="rTableHeading">
 	    <div class="rTableRow">
 	        <div class="rTableCell"><a href='/runtests'>Run tests</a></div>
-	       	<div class="rTableCell"><a href='/results'>Results</a></div>
-			    <div class="rTableCell rTableStatusWhite"><a href='/testpacks'>Test packs</a></div>
+	       	<div class="rTableCell rTableStatusWhite"><a href='/results'>Results</a></div>
+			    <div class="rTableCell"><a href='/testpacks'>Test packs</a></div>
 	    </div>
     </div>
-    <h2>Testpacks</h2>
+    <h2>Results of all sessions</h2>
 		<div class="rTableHeading">
 	    <div class="rTableRow">
-	      <div class="rTableCell">ID</div>
-        <div class="rTableCell">Time ago</div>
+	      <div class="rTableCell">Device\Session</div>
+        {{range .Sessions}}
+            <div class="rTableCell">s{{.ID}} {{.TimeAgo}} ago</div>
+  		  {{end}}
+        <div class="rTableCell"><a href="" onclick="proceedAddSessionLink();">+Add session</a></div>
 	    </div>
     </div>
-		<div class="rTableBody">
-  		{{range .Tesptacks}}
-      <div class="rTableRow">
-        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.ID}}</a></div>
-        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.TimeAgo}}</a></div>
-      </div>
-  		{{end}}
+
+    
+    <div class="rTableBody">
+      {{range .Rows}}
+        <div class="rTableRow">
+          <div class="rTableCell">{{.User}}</div>
+          {{range .Results}}
+            {{$cellStatusColorClass := ""}}
+            {{with (eq .Status 1)}} {{$cellStatusColorClass = " rTableStatusProgress"}} {{end}}
+            <div class="rTableCell{{$cellStatusColorClass}}">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+      		{{end}}
+          <div class="rTableCell"></div>
+        </div>
+      {{end}}
 	  </div>							
+
+				
 </body>
 
 </html>	

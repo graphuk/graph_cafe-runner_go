@@ -1,6 +1,7 @@
 package runs
 
 type RunPostModel struct {
-	SessionID       int
+	SessionID       string
+	TestpackID      string
 	DeviceOwnerName string
 }

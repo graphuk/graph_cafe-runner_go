@@ -156,7 +156,8 @@
 				xhr.open('POST', "/api/v1/runs", true);
 				xhr.setRequestHeader('Content-Type', 'application/json');
 				xhr.send(JSON.stringify({
-				    SessionId: 1,
+				    SessionID: document.getElementById('SessionSelector').value,
+            TestpackID: document.getElementById('TestpackSelector').value,
 				    DeviceOwnerName: document.getElementById('InputName').value
 				}));
 			}
@@ -185,7 +186,7 @@
     <div class="rTableHeading">
 	    <div class="rTableRow">
 	        <div class="rTableCell rTableStatusWhite"><a href='/runtests'>Run tests</a></div>
-	       	<div class="rTableCell"><a href='/projects'>Results</a></div>
+	       	<div class="rTableCell"><a href='/results'>Results</a></div>
 			    <div class="rTableCell"><a href='/testpacks'>Test packs</a></div>
 	    </div>
     </div>
@@ -194,20 +195,20 @@
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Session</div>
         <div class="rTableStatusCell rTableStatusWhite">
-          <select name="example">
-            <option value="1">latest: 4h</option>
-            <option value="2">5h</option>
-            <option value="3">6h</option>
+          <select id="SessionSelector">
+            {{range .Sessions}}
+              <option value={{.ID}}>{{.TimeAgo}}</option>
+        		{{end}}
           </select>
         </div>
       </div>
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Testpack</div>
         <div class="rTableStatusCell rTableStatusWhite">
-          <select name="example">
-            <option value="1">latest: 5h</option>
-            <option value="2">6h</option>
-            <option value="3">7h</option>
+          <select id="TestpackSelector">
+            {{range .Tesptacks}}
+              <option value={{.ID}}>{{.TimeAgo}}</option>
+        		{{end}}
           </select>        
         </div>
       </div>

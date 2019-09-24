@@ -4,18 +4,24 @@ import (
 	"strings"
 	"time"
 
-	//	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
+	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
 
 	"github.com/asdine/storm"
 )
 
-type runtestRec struct {
+type testpackRec struct {
 	ID      int
 	TimeAgo string
 }
 
-type runtestsListModel struct {
-	Tesptacks []runtestRec
+type sessionRec struct {
+	ID      int
+	TimeAgo string
+}
+
+type runtestsModel struct {
+	Sessions  []sessionRec
+	Tesptacks []testpackRec
 }
 
 //return duration like 14h27m5s
@@ -28,12 +34,19 @@ func timeAgoHumanString(now, moment time.Time) string {
 	return res
 }
 
-func NewRuntestsListModel(DB *storm.DB) *runtestsListModel {
-	res := &runtestsListModel{}
-	//now := time.Now()
-	// allRuntests := (&repositories.Runtests{DB}).FindAll()
-	// for _, curRuntest := range *allRuntests {
-	// 	res.Tesptacks = append(res.Tesptacks, runtestRec{curRuntest.ID, timeAgoHumanString(now, curRuntest.UploadTime)})
-	// }
+func NewRuntestsModel(DB *storm.DB) *runtestsModel {
+	res := &runtestsModel{}
+	now := time.Now()
+
+	allSessions := (&repositories.Sessions{DB}).FindAll()
+	for _, curSession := range *allSessions {
+		res.Sessions = append(res.Sessions, sessionRec{curSession.ID, timeAgoHumanString(now, curSession.CreatedTime)})
+	}
+
+	allTestpacks := (&repositories.Testpacks{DB}).FindAll()
+	for _, curTestpack := range *allTestpacks {
+		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)})
+	}
+
 	return res
 }

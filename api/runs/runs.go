@@ -37,8 +37,20 @@ func (t *Handler) Post(c echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	res := (&services.Run{t.DB, t.CafeRunnerConfig}).Create(model.SessionID, model.DeviceOwnerName)
-	log.Println(`Run for session ` + strconv.Itoa(model.SessionID) + ` created with id: ` + strconv.Itoa(res.ID))
+	sessionID, err := strconv.Atoi(model.SessionID)
+	if err != nil {
+		log.Println(err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	testpackID, err := strconv.Atoi(model.TestpackID)
+	if err != nil {
+		log.Println(err.Error())
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	res := (&services.Run{t.DB, t.CafeRunnerConfig}).Create(sessionID, testpackID, model.DeviceOwnerName)
+	log.Println(`Run for session ` + model.SessionID + ` created with id: ` + strconv.Itoa(res.ID))
 	go func() { (&services.Run{t.DB, t.CafeRunnerConfig}).RunInitSteps(res.ID) }() // init testpack async
 	return c.Redirect(301, `/api/v1/runs/`+strconv.Itoa(res.ID))
 }

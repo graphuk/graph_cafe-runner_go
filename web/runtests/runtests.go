@@ -20,8 +20,8 @@ func check(err error) {
 	}
 }
 
-func (t *Handler) RuntestsList(c echo.Context) error {
-	model := models.NewRuntestsListModel(t.DB)
+func (t *Handler) Runtests(c echo.Context) error {
+	model := models.NewRuntestsModel(t.DB)
 	return c.Render(http.StatusOK, `runtests/views/runtests.html`, model)
 }
 
@@ -29,6 +29,6 @@ func (t *Handler) RuntestsList(c echo.Context) error {
 // 	//testpackID, err := strconv.Atoi(c.Param(`id`))
 // 	check(err)
 
-// 	model := models.NewRuntestsListModel(t.DB)
+// 	model := models.NewRuntestsModel(t.DB)
 // 	return c.Render(http.StatusOK, `runtests/views/testpack.html`, model)
 // }

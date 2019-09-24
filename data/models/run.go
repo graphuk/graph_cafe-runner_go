@@ -21,6 +21,7 @@ const (
 type Run struct {
 	ID              int `storm:"increment"`
 	SessionID       int
+	TestpackID      int
 	Status          uint8
 	StartTime       time.Time
 	Port            int
