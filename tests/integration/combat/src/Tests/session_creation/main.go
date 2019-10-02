@@ -65,10 +65,10 @@ func main() {
 	server.WaitingForStdErrContains(`Testpack 1. Init started.`, time.Second*10)
 	server.WaitingForStdErrContains(`Testpack 1. Init finished.`, time.Second*10)
 
-	cmdutils.MustPost(`http://`+theTest.params.HostName.Value+`/api/v1/sessions`, `{"TestpackID": 1}`)
+	cmdutils.MustPost(`http://`+theTest.params.HostName.Value+`/api/v1/sessions`, `{}`)
 
 	server.WaitingForStdErrContains(`Post session received.`, time.Second*10)
-	server.WaitingForStdErrContains(`Session for testpack 1 created with id: 1`, time.Second*10)
+	server.WaitingForStdErrContains(`Session is created with id: 1`, time.Second*10)
 
 	fmt.Println(string(server.StdErrBuf))
 

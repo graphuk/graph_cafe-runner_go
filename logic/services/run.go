@@ -25,13 +25,14 @@ type Run struct {
 	CafeRunnerConfig *config.Configuration
 }
 
-func (t *Run) Create(SessionID int, DeviceOwnerName string) *models.Run {
+func (t *Run) Create(SessionID int, TestpackID int, DeviceOwnerName string) *models.Run {
 	var res *models.Run
 
 	unitOfWork := data.UnitOfWork{t.Tx}
 	command := func(tx storm.Node) (interface{}, error) {
-		(&repositories.Sessions{tx}).Find(SessionID) // check session exist
-		res = (&repositories.Runs{tx}).Create(SessionID, DeviceOwnerName)
+		(&repositories.Sessions{tx}).Find(SessionID)   // check session exist
+		(&repositories.Testpacks{tx}).Find(TestpackID) // check testpack exist
+		res = (&repositories.Runs{tx}).Create(SessionID, TestpackID, DeviceOwnerName)
 		return nil, nil
 	}
 	unitOfWork.ExecuteCommand(command)
@@ -81,13 +82,28 @@ func (t *Run) hackEndpointUtils(RunID int) {
 	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/endpoint-utils/index.js`, []byte(contentString), 644))
 }
 
+// func (t *Run) copyTestpack(RunID int) {
+// 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
+// 	run := (&repositories.Runs{t.Tx}).Find(RunID)
+// 	//	session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
+// 	runPath := fmt.Sprintf(runPathTemplate, RunID)
+
+// 	err := (&Testpack{t.Tx}).CopyToFolder(runPath)
+// 	if err != nil { // if copying failed
+// 		t.markAsCopyTestpackFailed(RunID, err)
+// 	} else { //if copying succeed
+// 		t.updateStatus(RunID, models.RunStatusCopyTestpackInProgress, models.RunStatusReadyForNPMInstall)
+// 		//t.npmInstall(RunID)
+// 	}
+// }
+
 func (t *Run) copyTestpack(RunID int) {
 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
 	run := (&repositories.Runs{t.Tx}).Find(RunID)
-	session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
+	//session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
 
-	err := (&Testpack{t.Tx}).CopyToFolder(session.TestpackID, runPath)
+	err := (&Testpack{t.Tx}).CopyToFolder(run.TestpackID, runPath)
 	if err != nil { // if copying failed
 		t.markAsCopyTestpackFailed(RunID, err)
 	} else { //if copying succeed

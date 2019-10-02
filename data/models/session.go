@@ -6,7 +6,6 @@ import (
 
 // Testpack model
 type Session struct {
-	ID          int `storm:"increment"`
-	TestpackID  int
+	ID int `storm:"increment"`
 	CreatedTime time.Time
 }

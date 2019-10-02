@@ -19,9 +19,8 @@ func check(err error) {
 	}
 }
 
-func (t *Sessions) Create(testpackID int) *models.Session {
+func (t *Sessions) Create() *models.Session {
 	session := &models.Session{
-		TestpackID:  testpackID,
 		CreatedTime: time.Now(),
 	}
 
@@ -38,6 +37,18 @@ func (t *Sessions) Find(id int) *models.Session {
 func (t *Sessions) FindAll() *[]models.Session {
 	res := &[]models.Session{}
 	check(t.Tx.All(res))
+	return res
+}
+
+func (t *Sessions) FindAllOrderIDDesc() *[]models.Session {
+	res := &[]models.Session{}
+	query := t.Tx.Select().OrderBy(`ID`).Reverse()
+	err := query.Find(res)
+	if err != nil { //ignore "not found" error. Return empty slice. All other errors are critical.
+		if err.Error() != `not found` {
+			check(err)
+		}
+	}
 	return res
 }
 

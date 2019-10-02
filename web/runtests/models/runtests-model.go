@@ -14,7 +14,13 @@ type testpackRec struct {
 	TimeAgo string
 }
 
-type testpacksListModel struct {
+type sessionRec struct {
+	ID      int
+	TimeAgo string
+}
+
+type runtestsModel struct {
+	Sessions  []sessionRec
 	Tesptacks []testpackRec
 }
 
@@ -28,12 +34,19 @@ func timeAgoHumanString(now, moment time.Time) string {
 	return res
 }
 
-func NewTestpacksListModel(DB *storm.DB) *testpacksListModel {
-	res := &testpacksListModel{}
+func NewRuntestsModel(DB *storm.DB) *runtestsModel {
+	res := &runtestsModel{}
 	now := time.Now()
-	allTestpacks := (&repositories.Testpacks{DB}).FindAll()
+
+	allSessions := (&repositories.Sessions{DB}).FindAllOrderIDDesc()
+	for _, curSession := range *allSessions {
+		res.Sessions = append(res.Sessions, sessionRec{curSession.ID, timeAgoHumanString(now, curSession.CreatedTime)})
+	}
+
+	allTestpacks := (&repositories.Testpacks{DB}).FindAllOrderIDDesc()
 	for _, curTestpack := range *allTestpacks {
 		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)})
 	}
+
 	return res
 }

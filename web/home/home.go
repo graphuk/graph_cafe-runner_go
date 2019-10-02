@@ -2,10 +2,8 @@ package home
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/asdine/storm"
-	"github.com/graph-uk/graph_cafe-runner_go/data/repositories"
 	"github.com/labstack/echo"
 )
 
@@ -20,8 +18,7 @@ func check(err error) {
 }
 
 func (t *Handler) Home(c echo.Context) error {
-	lastSession := (&repositories.Sessions{t.DB}).FindLast()
 	c.Response().Header().Set(`Cache-Control`, `no-cache`)
 	c.Response().Header().Set(`Pragma`, `no-cache`)
-	return c.Redirect(http.StatusMovedPermanently, `/sessions/`+strconv.Itoa(lastSession.ID))
+	return c.Redirect(http.StatusMovedPermanently, `/runtests`)
 }

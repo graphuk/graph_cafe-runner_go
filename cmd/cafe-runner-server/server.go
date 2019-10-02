@@ -16,7 +16,9 @@ import (
 	"github.com/graph-uk/graph_cafe-runner_go/api/testpacks"
 	"github.com/graph-uk/graph_cafe-runner_go/data/models"
 	webhome "github.com/graph-uk/graph_cafe-runner_go/web/home"
+	webresults "github.com/graph-uk/graph_cafe-runner_go/web/results"
 	webruns "github.com/graph-uk/graph_cafe-runner_go/web/runs"
+	webruntests "github.com/graph-uk/graph_cafe-runner_go/web/runtests"
 	websessions "github.com/graph-uk/graph_cafe-runner_go/web/sessions"
 	webtestpacks "github.com/graph-uk/graph_cafe-runner_go/web/testpacks"
 
@@ -73,10 +75,11 @@ func (t *CafeRunnerServer) Start() {
 	templates, _ := parseTemplates(&assetsBox)
 	renderer := &Template{Templates: templates}
 
-	//assets
 	e := echo.New()
 	e.Renderer = renderer
 	//e.Use(middleware.Logger())
+
+	//assets
 	assetHandler := http.FileServer(assetsBox)
 	e.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", assetHandler)))
 
@@ -86,6 +89,8 @@ func (t *CafeRunnerServer) Start() {
 	e.GET("/testpacks/:id", (&webtestpacks.Handler{db}).Testpack)
 	e.GET("/sessions/:id", (&websessions.Handler{db}).Session)
 	e.GET("/runs/:id", (&webruns.Handler{db, &t.config.Server.Hostname}).Run)
+	e.GET("/runtests", (&webruntests.Handler{db}).Runtests)
+	e.GET("/results", (&webresults.Handler{db}).Results)
 
 	//api
 	e.POST("/api/v1/testpacks", (&testpacks.Handler{db}).Post)
