@@ -162,6 +162,27 @@
 				}));
 			}
 
+			function proceedAddSessionLink () {
+        var xhr = new XMLHttpRequest();
+				// we defined the xhr
+				xhr.onreadystatechange = function () {
+					if (this.readyState != 4) return;
+
+					if (this.status == 201) {
+						//var data = JSON.parse(this.responseText);
+						//console.log(data);
+						//window.location.href = "/runs/"+data.ID;
+					}else{
+						console.log(this.status);
+						console.log(this.data);
+					}
+				};
+
+				xhr.open('POST', "/api/v1/sessions", true);
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.send(JSON.stringify({}));
+			}
+
 			function onload() {
 				nameValue = getCookie("name");
 				if (nameValue!=undefined){
@@ -172,12 +193,12 @@
 
 			function proceedNameInput() {
 				var inputVal = document.getElementById('InputName').value;
+				setCookie("name",inputVal);
 				if (inputVal.length>2){
 					document.getElementById('ButtonStart').removeAttribute("disabled");
 				}else{
 					document.getElementById('ButtonStart').setAttribute("disabled", "disabled");
 				}
-				setCookie("name",inputVal);
 			}			
 		</script>    
 </head>
@@ -195,29 +216,43 @@
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Session</div>
         <div class="rTableStatusCell rTableStatusWhite">
-          <select id="SessionSelector">
-            {{range .Sessions}}
-              <option value={{.ID}}>{{.TimeAgo}}</option>
-        		{{end}}
-          </select>
+          {{if .Sessions}}
+            <select id="SessionSelector">
+              {{range .Sessions}}
+                <option value={{.ID}}>{{.TimeAgo}}</option>
+          		{{end}}
+            </select>
+          {{else}}
+            Sessions not exist yet<br>
+            <a href="" onclick="proceedAddSessionLink();">Add a session</a>
+          {{end}}
         </div>
       </div>
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Testpack</div>
         <div class="rTableStatusCell rTableStatusWhite">
-          <select id="TestpackSelector">
-            {{range .Tesptacks}}
-              <option value={{.ID}}>{{.TimeAgo}}</option>
-        		{{end}}
-          </select>        
+          {{if .Tesptacks}}
+            <select id="TestpackSelector">
+              {{range .Tesptacks}}
+                <option value={{.ID}}>{{.TimeAgo}}</option>
+          		{{end}}
+            </select>
+          {{else}}
+            <div>
+              Testpacks not exist yet<br>
+              Upload some testpack using <a href="/assets/assets/dist/win64/cafe-runner-client.exe">client</a><br>
+            </div>	
+          {{end}}    
         </div>
       </div>
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Name</div>
         <div class="rTableStatusCell rTableStatusWhite"><input id="InputName" type="text" placeholder="Put your name and device" onkeyup="proceedNameInput();"></div>
       </div>
-	  </div>							  
-    <button id="ButtonStart" type="button" disabled onclick="proceedStartButton();">Start testing</button>					
+	  </div>
+    {{if and .Tesptacks .Sessions}}
+      <button id="ButtonStart" type="button" disabled onclick="proceedStartButton();">Start testing</button>		
+    {{end}}			
 </body>
 
 </html>	

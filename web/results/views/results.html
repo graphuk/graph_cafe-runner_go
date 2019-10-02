@@ -97,7 +97,6 @@
 
 		<script type="text/javascript">
 			function proceedAddSessionLink () {
-
         var xhr = new XMLHttpRequest();
 				// we defined the xhr
 				xhr.onreadystatechange = function () {
@@ -129,30 +128,38 @@
 	    </div>
     </div>
     <h2>Results of all sessions</h2>
-		<div class="rTableHeading">
-	    <div class="rTableRow">
-	      <div class="rTableCell">Device\Session</div>
-        {{range .Sessions}}
-            <div class="rTableCell">s{{.ID}} {{.TimeAgo}} ago</div>
-  		  {{end}}
-        <div class="rTableCell"><a href="" onclick="proceedAddSessionLink();">+Add session</a></div>
-	    </div>
-    </div>
-    <div class="rTableBody">
-      {{range .Rows}}
-        <div class="rTableRow">
-          <div class="rTableCell">{{.User}}</div>
-          {{range .Results}}
-            {{if eq .Status 1}}
-              <div class="rTableCell rTableStatusProgress">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
-            {{else}}
-               <div class="rTableCell"></div>
-            {{end}}
-      		{{end}}
-          <div class="rTableCell"></div>
-        </div>
-      {{end}}
-	  </div>							
+    {{if .Rows}}
+  		<div class="rTableHeading">
+  	    <div class="rTableRow">
+  	      <div class="rTableCell">Device\Session</div>
+          {{range .Sessions}}
+              <div class="rTableCell">s{{.ID}} {{.TimeAgo}} ago</div>
+    		  {{end}}
+          <div class="rTableCell"><a href="" onclick="proceedAddSessionLink();">+Add session</a></div>
+  	    </div>
+      </div>
+      <div class="rTableBody">
+        {{range .Rows}}
+          <div class="rTableRow">
+            <div class="rTableCell">{{.User}}</div>
+            {{range .Results}}
+              {{if eq .Status 1}}
+                <div class="rTableCell rTableStatusProgress">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+              {{else}}
+                 <div class="rTableCell"></div>
+              {{end}}
+        		{{end}}
+            <div class="rTableCell"></div>
+          </div>
+        {{end}}
+  	  </div>	
+    {{else}}
+      <div>
+        Results not found.<br>
+        Upload some testpack using <a href="/assets/assets/dist/win64/cafe-runner-client.exe">client</a><br>
+        Then <a href="/runtests">add session</a>, and run some test <a href="/runtests">here</a>
+      </div>	
+    {{end}}					
 </body>
 
 </html>	

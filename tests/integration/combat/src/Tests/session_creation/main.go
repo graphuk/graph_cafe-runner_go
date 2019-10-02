@@ -72,8 +72,6 @@ func main() {
 
 	fmt.Println(string(server.StdErrBuf))
 
-	return
-
 	cafeRunnerWeb := caferunnerweb.NewCafeRunnerWeb()
 	defer cafeRunnerWeb.Cleanup()
 	PageSession := cafeRunnerWeb.OpenPageSession()

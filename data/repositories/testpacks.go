@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"crypto/md5"
-	//	"strconv"
 	"time"
 
 	"github.com/asdine/storm"
@@ -47,7 +46,12 @@ func (t *Testpacks) FindAll() *[]models.Testpack {
 func (t *Testpacks) FindAllOrderIDDesc() *[]models.Testpack {
 	res := &[]models.Testpack{}
 	query := t.Tx.Select().OrderBy(`ID`).Reverse()
-	check(query.Find(res))
+	err := query.Find(res)
+	if err != nil { //ignore "not found" error. Return empty slice. All other errors are critical.
+		if err.Error() != `not found` {
+			check(err)
+		}
+	}
 	return res
 }
 

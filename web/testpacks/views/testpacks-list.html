@@ -105,20 +105,27 @@
 	    </div>
     </div>
     <h2>Testpacks</h2>
-		<div class="rTableHeading">
-	    <div class="rTableRow">
-	      <div class="rTableCell">ID</div>
-        <div class="rTableCell">Time ago</div>
-	    </div>
-    </div>
-		<div class="rTableBody">
-  		{{range .Tesptacks}}
-      <div class="rTableRow">
-        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.ID}}</a></div>
-        <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.TimeAgo}}</a></div>
+    {{if .Tesptacks}}
+  		<div class="rTableHeading">
+  	    <div class="rTableRow">
+  	      <div class="rTableCell">ID</div>
+          <div class="rTableCell">Time ago</div>
+  	    </div>
       </div>
-  		{{end}}
-	  </div>							
+  		<div class="rTableBody">
+    		{{range .Tesptacks}}
+          <div class="rTableRow">
+            <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.ID}}</a></div>
+            <div class="rTableStatusCell rTableStatusWhite"><a href="/testpacks/{{.ID}}">{{.TimeAgo}}</a></div>
+          </div>
+    		{{end}}
+  	  </div>
+    {{else}}
+      <div>
+        Testpacks not found.<br>
+        Upload some testpack using <a href="/assets/dist">client</a>.
+      </div>
+    {{end}}
 </body>
 
 </html>	
