@@ -75,10 +75,11 @@ func (t *CafeRunnerServer) Start() {
 	templates, _ := parseTemplates(&assetsBox)
 	renderer := &Template{Templates: templates}
 
-	//assets
 	e := echo.New()
 	e.Renderer = renderer
 	//e.Use(middleware.Logger())
+
+	//assets
 	assetHandler := http.FileServer(assetsBox)
 	e.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", assetHandler)))
 

@@ -40,6 +40,13 @@ func (t *Sessions) FindAll() *[]models.Session {
 	return res
 }
 
+func (t *Sessions) FindAllOrderIDDesc() *[]models.Session {
+	res := &[]models.Session{}
+	query := t.Tx.Select().OrderBy(`ID`).Reverse()
+	check(query.Find(res))
+	return res
+}
+
 func (t *Sessions) FindByTestpackID(testpackID int) *[]models.Session {
 	res := &[]models.Session{}
 	err := t.Tx.Find(`TestpackID`, testpackID, res)

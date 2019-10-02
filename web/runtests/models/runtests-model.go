@@ -38,12 +38,12 @@ func NewRuntestsModel(DB *storm.DB) *runtestsModel {
 	res := &runtestsModel{}
 	now := time.Now()
 
-	allSessions := (&repositories.Sessions{DB}).FindAll()
+	allSessions := (&repositories.Sessions{DB}).FindAllOrderIDDesc()
 	for _, curSession := range *allSessions {
 		res.Sessions = append(res.Sessions, sessionRec{curSession.ID, timeAgoHumanString(now, curSession.CreatedTime)})
 	}
 
-	allTestpacks := (&repositories.Testpacks{DB}).FindAll()
+	allTestpacks := (&repositories.Testpacks{DB}).FindAllOrderIDDesc()
 	for _, curTestpack := range *allTestpacks {
 		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)})
 	}

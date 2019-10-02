@@ -44,6 +44,13 @@ func (t *Testpacks) FindAll() *[]models.Testpack {
 	return res
 }
 
+func (t *Testpacks) FindAllOrderIDDesc() *[]models.Testpack {
+	res := &[]models.Testpack{}
+	query := t.Tx.Select().OrderBy(`ID`).Reverse()
+	check(query.Find(res))
+	return res
+}
+
 func (t *Testpacks) Update(tespack *models.Testpack) {
 	check(t.Tx.Update(tespack))
 }
