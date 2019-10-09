@@ -120,7 +120,11 @@ func (t *Run) runCafeThread(RunID int) {
 	pwd, err := os.Getwd()
 	check(err)
 
-	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/testcafe/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, t.CafeRunnerConfig.Server.Hostname, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath+`/testcafe`, os.Environ())
+	run := (&repositories.Runs{t.Tx}).Find(RunID)
+	testpack := (&repositories.Testpacks{t.Tx}).Find(run.TestpackID)
+	envVars := append(testpack.EnvVars, os.Environ()...)
+
+	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/testcafe/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, t.CafeRunnerConfig.Server.Hostname, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath+`/testcafe`, envVars)
 
 	if err != nil {
 		log.Println(`Failed to start cafe thread` + strconv.Itoa(RunID))

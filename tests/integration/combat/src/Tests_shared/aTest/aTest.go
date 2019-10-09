@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 )
 
 // This is the base struct contain all required in all test fields
@@ -151,6 +152,13 @@ func (a *ATest) CreateOutputFolder() {
 		panic(`cannot get current path.`)
 	}
 	os.RemoveAll(curDir + string(os.PathSeparator) + `out`)
+
+	for i := 0; i <= 40; i++ { // wait OS actually deleted the folder
+		if _, err := os.Stat(curDir + string(os.PathSeparator) + `out`); os.IsNotExist(err) {
+			break
+		}
+		time.Sleep(time.Second)
+	}
 
 	err = os.Mkdir("out", 0777)
 	if err != nil {

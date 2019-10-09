@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "testcafe": "^0.23.3",
-    "testcafe-react-selectors": "^3.0.3"
+    "testcafe": "^0.23.3"
   }
 }

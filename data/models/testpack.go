@@ -21,4 +21,5 @@ type Testpack struct {
 	Zip         []byte
 	ZipHash     []byte
 	InitFailOut []byte
+	EnvVars     []string
 }
