@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 
+	"github.com/graph-uk/graph_cafe-runner_go/api/testpacks/models"
 	"github.com/graph-uk/graph_cafe-runner_go/logic/utils"
 )
 
@@ -26,28 +28,46 @@ func compressTestpack() (string, error) {
 	return tmpFile.Name(), nil
 }
 
-func main() {
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
 
-	zipName, _ := compressTestpack()
+//env variables may be provided after server address
+//separator is space. format
+//VAR1=VALUE1 VAR2=VALUE2 ...
+func parseEnvVariables() []string {
+	res := []string{}
+	countOfArgs := len(os.Args)
+	if countOfArgs > 2 {
+		for i := 2; i < countOfArgs; i++ {
+			res = append(res, os.Args[i])
+		}
+	}
+	return res
+}
+
+func main() {
+	zipName, err := compressTestpack()
+	check(err)
 
 	zipbytes, err := ioutil.ReadFile(zipName)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 
 	content := base64.StdEncoding.EncodeToString(zipbytes)
-	json := fmt.Sprintf("{\"Content\": \"%s\"}", content)
-	body := bytes.NewBuffer([]byte(json))
+
+	model := testpacks.TestpackPostModel{content, parseEnvVariables()}
+	jsonBytes, err := json.Marshal(model)
+	check(err)
+	body := bytes.NewBuffer(jsonBytes)
 
 	serverAddress := os.Args[1]
+
 	resp, err := http.Post(serverAddress+`/api/v1/testpacks`, "application/json", body)
-	if err != nil {
-		panic(err)
-	}
+	check(err)
 	defer resp.Body.Close()
 
 	_, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err.Error())
-	}
+	check(err)
 }

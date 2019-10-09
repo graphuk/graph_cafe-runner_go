@@ -42,7 +42,7 @@ func (t *Handler) Post(c echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	res := (&repositories.Testpacks{t.DB}).Create(&testpackContent)
+	res := (&repositories.Testpacks{t.DB}).Create(&testpackContent, model.EnvVars)
 	log.Println(`Testpack created with id: ` + strconv.Itoa(res.ID))
 	go func() { (&services.Testpack{t.DB}).RunInitSteps(res.ID) }() // init testpack async
 	return c.JSON(http.StatusCreated, res)

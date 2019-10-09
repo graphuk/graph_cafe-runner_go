@@ -12,7 +12,7 @@ type Testpacks struct {
 	Tx storm.Node
 }
 
-func (t *Testpacks) Create(zipfile *[]byte) *models.Testpack {
+func (t *Testpacks) Create(zipfile *[]byte, envVars []string) *models.Testpack {
 	hasher := md5.New()
 	_, err := hasher.Write(*zipfile)
 	check(err)
@@ -22,6 +22,7 @@ func (t *Testpacks) Create(zipfile *[]byte) *models.Testpack {
 		UploadTime: time.Now(),
 		Zip:        *zipfile,
 		ZipHash:    hasher.Sum(nil),
+		EnvVars:    envVars,
 	}
 
 	check(t.Tx.Save(testpack))
