@@ -18,8 +18,9 @@ func NewCafeRunnerWeb() *CafeRunnerWeb {
 	return &CafeRunnerWeb{browser.NewBrowser()}
 }
 
-func (t *CafeRunnerWeb) OpenPageSession() *PageSession {
-	return NewOpenPageSession(t.bro)
+func (t *CafeRunnerWeb) OpenPageRuntests() *PageRuntests {
+	OpenPageRuntests(t.bro)
+	return NewPageRuntests(t.bro)
 }
 
 func (t *CafeRunnerWeb) Cleanup() {

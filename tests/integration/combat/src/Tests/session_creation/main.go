@@ -74,9 +74,9 @@ func main() {
 
 	cafeRunnerWeb := caferunnerweb.NewCafeRunnerWeb()
 	defer cafeRunnerWeb.Cleanup()
-	PageSession := cafeRunnerWeb.OpenPageSession()
-	PageSession.FillDeviceOwnerName(`test1`)
-	PageSession.ClickStartTesting()
+	PageRuntests := cafeRunnerWeb.OpenPageRuntests()
+	PageRuntests.FillDeviceOwnerName(`test1`)
+	PageRuntests.ClickStartTesting()
 
 	server.WaitingForStdErrContains(`Post run received.`, time.Second*10)
 	server.WaitingForStdErrContains(`Run for session 1 created with id: 1`, time.Second*10)
@@ -90,14 +90,29 @@ func main() {
 	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-fail/testcafe`, os.Environ())
 	server.WaitingForStdErrContains(`Testpack created with id: 2`, time.Second*10)
 
-	PageSession = cafeRunnerWeb.OpenPageSession()
-	PageSession.FillDeviceOwnerName(`x`)
-	PageSession.ClickStartTesting()
+	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
+	PageRuntests.FillDeviceOwnerName(`x`)
+	PageRuntests.ClickStartTesting()
 
 	server.WaitingForStdErrContains(`Run 2. Init finished. Connect for testing.`, time.Second*60)
 	server.WaitingForStdErrContains(`Run 2. Cafe thread finished with exitCode`, time.Second*60)
 
-	PageSession = cafeRunnerWeb.OpenPageSession()
-	//PageSession.CheckCellClassByDeviceNameAndColumn(`test1x`, `2`, `rTableCell rTableStatusFailed`)
-	PageSession.ClickStartTesting()
+	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
+	PageResults := PageRuntests.PartHeader.ClickResults()
+
+	PageResults.CheckCellClassByDeviceNameAndColumn(`test1x`, `2`, `rTableCell rTableStatusFailed`)
+
+	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-success/testcafe`, os.Environ())
+	server.WaitingForStdErrContains(`Testpack created with id: 3`, time.Second*10)
+
+	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
+	PageRuntests.ClickStartTesting()
+
+	server.WaitingForStdErrContains(`Run 3. Init finished. Connect for testing.`, time.Second*60)
+	server.WaitingForStdErrContains(`Run 3. Cafe thread finished with exitCode`, time.Second*60)
+
+	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
+	PageResults = PageRuntests.PartHeader.ClickResults()
+
+	PageResults.CheckCellClassByDeviceNameAndColumn(`test1x`, `2`, `rTableCell rTableStatusSuccess`)
 }

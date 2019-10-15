@@ -78,8 +78,8 @@ func NewResultsModel(DB *storm.DB) *resultsModel {
 				curSessionUserResult.Status = ResultStatusNotRunned
 			} else {
 				curSessionUserResult.TriesCount = len(*resultRuns)
-				curSessionUserResult.LastTryAgo = timeAgoHumanString(now, (*resultRuns)[0].StartTime)
-				if (*resultRuns)[0].ExitCode == `0` {
+				curSessionUserResult.LastTryAgo = timeAgoHumanString(now, (*resultRuns)[curSessionUserResult.TriesCount-1].StartTime)
+				if (*resultRuns)[curSessionUserResult.TriesCount-1].ExitCode == `0` {
 					curSessionUserResult.Status = ResultStatusLastPassed
 				} else {
 					curSessionUserResult.Status = ResultStatusLastLastFailed
