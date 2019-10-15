@@ -26,7 +26,7 @@
             background-color: yellow;
         }		
 		
-		.rTableStatusWhite {
+		  .rTableStatusWhite {
             background-color: white;
         }
 		
@@ -34,8 +34,12 @@
             background-color: grey;
         }
 		
-        .rTableStatusProgress {
+        .rTableStatusSuccess {
             background-color: #99ff99;
+        }
+
+        .rTableStatusFailed {
+            background-color: #ff9999;
         }
         
         .rTableHeading {
@@ -144,9 +148,13 @@
             <div class="rTableCell">{{.User}}</div>
             {{range .Results}}
               {{if eq .Status 1}}
-                <div class="rTableCell rTableStatusProgress">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+                <div class="rTableCell rTableStatusSuccess">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
               {{else}}
-                 <div class="rTableCell"></div>
+                {{if eq .Status 2}}
+                  <div class="rTableCell rTableStatusFailed">{{.LastTryAgo}} ago; tries: {{.TriesCount}}</div>
+                {{else}}
+                  <div class="rTableCell"></div>
+                {{end}}
               {{end}}
         		{{end}}
             <div class="rTableCell"></div>

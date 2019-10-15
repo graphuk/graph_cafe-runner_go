@@ -88,7 +88,7 @@ func (t *CmdProcess) refreshOutBufLoop() {
 
 func (t *CmdProcess) WaitingForStdErrContains(textPart string, timeout time.Duration) {
 	startMoment := time.Now()
-	log.Println(`AwaitErr - ` + t.GetShortCommand() + `: ` + textPart)
+	log.Println(`AwaitOut - ` + t.GetShortCommand() + `: ` + textPart)
 	for {
 		if strings.Contains(string(t.StdErrBuf), textPart) {
 			break

@@ -21,3 +21,8 @@ func (t *PageSession) FillDeviceOwnerName(value string) {
 func (t *PageSession) ClickStartTesting() {
 	t.Bro.ClickByXpath(`//button`)
 }
+
+// //2nd column is first result column. 1st column contains device name.
+// func (t *PageSession) CheckCellClassByDeviceNameAndColumn(deviceName, column, class string) {
+// 	t.Bro.ClickByXpath(`(//div[@class='rTableCell' and text()='` + deviceName + `']/../div[` + column + `])[@class='` + class + `']`)
+// }
