@@ -134,10 +134,18 @@ func (t *Browser) ClickByXpath(xpath string) {
 }
 
 func (t *Browser) FillByXpath(xpath, value string) {
-	log.Println(`ClickByXpath ` + xpath)
+	log.Println(`FillByXpath ` + xpath)
 
 	timeout(func() {
 		check(chromedp.Run(t.ctx, chromedp.SendKeys(xpath, value, chromedp.NodeVisible)))
+	}, t.Timeout)
+}
+
+func (t *Browser) ClearByXpath(xpath string) {
+	log.Println(`ClearByXpath ` + xpath)
+
+	timeout(func() {
+		check(chromedp.Run(t.ctx, chromedp.Clear(xpath, chromedp.NodeVisible)))
 	}, t.Timeout)
 }
 
