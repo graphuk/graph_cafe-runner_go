@@ -51,7 +51,9 @@ func (t *Handler) Post(c echo.Context) error {
 
 	res := (&services.Run{t.DB, t.CafeRunnerConfig}).Create(sessionID, testpackID, model.DeviceOwnerName)
 	log.Println(`Run for session ` + model.SessionID + ` created with id: ` + strconv.Itoa(res.ID))
-	go func() { (&services.Run{t.DB, t.CafeRunnerConfig}).RunInitSteps(res.ID) }() // init testpack async
+	go func() {
+		(&services.Run{t.DB, t.CafeRunnerConfig}).RunInitSteps(res.ID, t.CafeRunnerConfig.Server.Hostname, t.CafeRunnerConfig.Server.Port)
+	}() // init testpack async
 	return c.Redirect(301, `/api/v1/runs/`+strconv.Itoa(res.ID))
 }
 

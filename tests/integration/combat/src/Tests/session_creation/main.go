@@ -111,6 +111,9 @@ func main() {
 	server.WaitingForStdErrContains(`Run 3. Init finished. Connect for testing.`, time.Second*60)
 	server.WaitingForStdErrContains(`Run 3. Cafe thread finished with exitCode`, time.Second*60)
 
+	time.Sleep(10 * time.Second)
+	PageRuntests.Bro.GetTextByXpath(`//body[contains(text(),'Results of run')]`) //check we switched to results page
+
 	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
 	PageResults = PageRuntests.PartHeader.ClickResults()
 
