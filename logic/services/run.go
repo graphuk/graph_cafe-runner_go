@@ -82,20 +82,29 @@ func (t *Run) hackEndpointUtils(RunID int) {
 	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/endpoint-utils/index.js`, []byte(contentString), 644))
 }
 
-// func (t *Run) copyTestpack(RunID int) {
-// 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
-// 	run := (&repositories.Runs{t.Tx}).Find(RunID)
-// 	//	session := (&repositories.Sessions{t.Tx}).Find(run.SessionID)
-// 	runPath := fmt.Sprintf(runPathTemplate, RunID)
-
-// 	err := (&Testpack{t.Tx}).CopyToFolder(runPath)
-// 	if err != nil { // if copying failed
-// 		t.markAsCopyTestpackFailed(RunID, err)
-// 	} else { //if copying succeed
-// 		t.updateStatus(RunID, models.RunStatusCopyTestpackInProgress, models.RunStatusReadyForNPMInstall)
-// 		//t.npmInstall(RunID)
-// 	}
-// }
+//let's idle page (at the end of session) redirect back to results.
+func (t *Run) hackIdlePageForBackRedirect(RunID int, serverHostname string, serverPort int) {
+	runPath := fmt.Sprintf(runPathTemplate, RunID)
+	contentBytes, err := ioutil.ReadFile(runPath + `/testcafe/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`)
+	check(err)
+	contentString := string(contentBytes)
+	contentString = strings.Replace(contentString, `    new IdlePage('{{{statusUrl}}}', '{{{heartbeatUrl}}}', '{{{initScriptUrl}}}', { retryTestPages: {{{retryTestPages}}} });`,
+		`    new IdlePage('{{{statusUrl}}}', '{{{heartbeatUrl}}}', '{{{initScriptUrl}}}', { retryTestPages: {{{retryTestPages}}} });
+    function updateRunStatus(){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState != 4) return;
+            if (this.status != 200) {
+                window.location.href="http://`+serverHostname+`:`+strconv.Itoa(serverPort)+`/runs/`+strconv.Itoa(RunID)+`";
+                //window.history.go(-2);
+            }
+        };
+        xhr.open('GET', "{{{statusUrl}}}", true);
+        xhr.send();
+    }
+    setInterval(updateRunStatus, 5000);`, -1)
+	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`, []byte(contentString), 644))
+}
 
 func (t *Run) copyTestpack(RunID int) {
 	t.updateStatus(RunID, models.RunStatusReadyForCopyTestpack, models.RunStatusCopyTestpackInProgress)
@@ -138,7 +147,7 @@ func (t *Run) runCafeThread(RunID int) {
 	go t.watchCafeThread(RunID, cmd, time.Minute*10)
 }
 
-func (t *Run) RunInitSteps(RunID int) {
+func (t *Run) RunInitSteps(RunID int, serverHostname string, serverPort int) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Println("ERROR: Failed on init steps for run: ", RunID)
@@ -150,6 +159,7 @@ func (t *Run) RunInitSteps(RunID int) {
 	t.copyTestpack(RunID)
 	t.npmInstall(RunID)
 	t.hackEndpointUtils(RunID)
+	t.hackIdlePageForBackRedirect(RunID, serverHostname, serverPort)
 	t.runCafeThread(RunID)
 	log.Println(`Run ` + strconv.Itoa(RunID) + `. Init finished. Connect for testing.`)
 }
