@@ -83,7 +83,7 @@ func (t *Run) hackEndpointUtils(RunID int) {
 }
 
 //let's idle page (at the end of session) redirect back to results.
-func (t *Run) hackIdlePageForBackRedirect(RunID int, serverHostname string, serverPort int) {
+func (t *Run) hackIdlePageForBackRedirect(RunID int, externalURL string) {
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
 	contentBytes, err := ioutil.ReadFile(runPath + `/testcafe/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`)
 	check(err)
@@ -95,7 +95,7 @@ func (t *Run) hackIdlePageForBackRedirect(RunID int, serverHostname string, serv
         xhr.onreadystatechange = function () {
             if (this.readyState != 4) return;
             if (this.status != 200) {
-                window.location.href="http://`+serverHostname+`:`+strconv.Itoa(serverPort)+`/runs/`+strconv.Itoa(RunID)+`";
+                window.location.href="`+externalURL+`/runs/`+strconv.Itoa(RunID)+`";
                 //window.history.go(-2);
             }
         };
@@ -147,7 +147,7 @@ func (t *Run) runCafeThread(RunID int) {
 	go t.watchCafeThread(RunID, cmd, time.Minute*10)
 }
 
-func (t *Run) RunInitSteps(RunID int, serverHostname string, serverPort int) {
+func (t *Run) RunInitSteps(RunID int, ExternalURL string) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Println("ERROR: Failed on init steps for run: ", RunID)
@@ -159,7 +159,7 @@ func (t *Run) RunInitSteps(RunID int, serverHostname string, serverPort int) {
 	t.copyTestpack(RunID)
 	t.npmInstall(RunID)
 	t.hackEndpointUtils(RunID)
-	t.hackIdlePageForBackRedirect(RunID, serverHostname, serverPort)
+	t.hackIdlePageForBackRedirect(RunID, ExternalURL)
 	t.runCafeThread(RunID)
 	log.Println(`Run ` + strconv.Itoa(RunID) + `. Init finished. Connect for testing.`)
 }

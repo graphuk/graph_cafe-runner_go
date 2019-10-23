@@ -17,7 +17,8 @@ func GetConfiguration() *Configuration {
 	viper.AddConfigPath(`.`)
 	viper.SetDefault(`data.path`, `.`)
 	viper.SetDefault(`server.port`, `3133`)
-	viper.SetDefault(`server.hostname`, `localhost`)
+	viper.SetDefault(`server.hostname`, `localhost`)                // without protocol and port. like "cafe-server.organization.org"
+	viper.SetDefault(`server.externalurl`, `http://localhost:3133`) // external web url. Port and protocols can be redefined for work with reverse-proxy (or in docker).
 	viper.SetDefault(`server.cafe.lowport`, `21000`)
 	viper.SetDefault(`server.cafe.highport`, `21010`)
 
@@ -45,6 +46,7 @@ func (t *Configuration) PrintToLog() {
 	log.Printf(`data.path=		%s`, t.Data.Path)
 	log.Printf(`server.hostname=	%s`, t.Server.Hostname)
 	log.Printf(`server.port=	%d`, t.Server.Port)
+	log.Printf(`server.externalurl=	%s`, t.Server.ExternalURL)
 	log.Printf(`server.cafe.lowport=	%d`, t.Server.Cafe.LowPort)
 	log.Printf(`server.cafe.highport=	%d`, t.Server.Cafe.HighPort)
 }
