@@ -85,7 +85,7 @@ func main() {
 	server.WaitingForStdErrContains(`Run 1: free ports -`, time.Second*70)
 	server.WaitingForStdErrContains(`remote test1.js --hostname localhost --ports`, time.Second*10)
 	server.WaitingForStdErrContains(`Run 1. Init finished. Connect for testing.`, time.Second*10)
-	server.WaitingForStdErrContains(`Run 1. Cafe thread finished with exitCode 0`, time.Second*60)
+	server.WaitingForStdErrContains(`Run 1. Cafe thread finished with exitCode 0`, time.Second*90)
 
 	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-fail/testcafe`, os.Environ())
 	server.WaitingForStdErrContains(`Testpack created with id: 2`, time.Second*10)
@@ -95,7 +95,7 @@ func main() {
 	PageRuntests.ClickStartTesting()
 
 	server.WaitingForStdErrContains(`Run 2. Init finished. Connect for testing.`, time.Second*60)
-	server.WaitingForStdErrContains(`Run 2. Cafe thread finished with exitCode`, time.Second*60)
+	server.WaitingForStdErrContains(`Run 2. Cafe thread finished with exitCode`, time.Second*90)
 
 	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
 	PageResults := PageRuntests.PartHeader.ClickResults()
@@ -109,7 +109,7 @@ func main() {
 	PageRuntests.ClickStartTesting()
 
 	server.WaitingForStdErrContains(`Run 3. Init finished. Connect for testing.`, time.Second*60)
-	server.WaitingForStdErrContains(`Run 3. Cafe thread finished with exitCode`, time.Second*60)
+	server.WaitingForStdErrContains(`Run 3. Cafe thread finished with exitCode`, time.Second*90)
 
 	time.Sleep(10 * time.Second)
 	PageRuntests.Bro.GetTextByXpath(`//body[contains(text(),'Results of run')]`) //check we switched to results page
