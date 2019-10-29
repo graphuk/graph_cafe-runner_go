@@ -44,7 +44,7 @@ func (t *Run) npmInstall(RunID int) {
 
 	t.updateStatus(RunID, models.RunStatusReadyForNPMInstall, models.RunStatusNPMInstallProgress)
 
-	out, err := utils.ExecuteCommand(`npm`, []string{`install`}, runPath+`/testcafe`, os.Environ(), time.Minute*3)
+	out, err := utils.ExecuteCommand(`npm`, []string{`install`}, runPath, os.Environ(), time.Minute*3)
 	if err != nil {
 		log.Println(`Failed to run "npm install" for run ` + strconv.Itoa(RunID))
 		log.Println(err.Error())
@@ -75,17 +75,17 @@ func (t *Run) npmInstall(RunID int) {
 //that's due to isMyHostname run server at random port (not forwarded to container), and cannot connect to itself.
 func (t *Run) hackEndpointUtils(RunID int) {
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
-	contentBytes, err := ioutil.ReadFile(runPath + `/testcafe/node_modules/endpoint-utils/index.js`)
+	contentBytes, err := ioutil.ReadFile(runPath + `/node_modules/endpoint-utils/index.js`)
 	check(err)
 	contentString := string(contentBytes)
 	contentString = strings.Replace(contentString, `    return getFreePort()`, `    return true; return getFreePort()`, -1)
-	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/endpoint-utils/index.js`, []byte(contentString), 644))
+	check(ioutil.WriteFile(runPath+`/node_modules/endpoint-utils/index.js`, []byte(contentString), 644))
 }
 
 //let's idle page (at the end of session) redirect back to results.
 func (t *Run) hackIdlePageForBackRedirect(RunID int, externalURL string) {
 	runPath := fmt.Sprintf(runPathTemplate, RunID)
-	contentBytes, err := ioutil.ReadFile(runPath + `/testcafe/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`)
+	contentBytes, err := ioutil.ReadFile(runPath + `/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`)
 	check(err)
 	contentString := string(contentBytes)
 	contentString = strings.Replace(contentString, `    new IdlePage('{{{statusUrl}}}', '{{{heartbeatUrl}}}', '{{{initScriptUrl}}}', { retryTestPages: {{{retryTestPages}}} });`,
@@ -103,7 +103,7 @@ func (t *Run) hackIdlePageForBackRedirect(RunID int, externalURL string) {
         xhr.send();
     }
     setInterval(updateRunStatus, 5000);`, -1)
-	check(ioutil.WriteFile(runPath+`/testcafe/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`, []byte(contentString), 644))
+	check(ioutil.WriteFile(runPath+`/node_modules/testcafe/lib/client/browser/idle-page/index.html.mustache`, []byte(contentString), 644))
 }
 
 func (t *Run) copyTestpack(RunID int) {
@@ -133,7 +133,7 @@ func (t *Run) runCafeThread(RunID int) {
 	testpack := (&repositories.Testpacks{t.Tx}).Find(run.TestpackID)
 	envVars := append(testpack.EnvVars, os.Environ()...)
 
-	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/testcafe/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, t.CafeRunnerConfig.Server.Hostname, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath+`/testcafe`, envVars)
+	cmd, err := utils.StartCmd(`node`, []string{pwd + `/` + runPath + `/node_modules/testcafe/bin/testcafe.js`, `remote`, `test1.js`, `--hostname`, t.CafeRunnerConfig.Server.Hostname, `--ports`, strconv.Itoa(freePort1) + `,` + strconv.Itoa(freePort2)}, pwd+`/`+runPath, envVars)
 
 	if err != nil {
 		log.Println(`Failed to start cafe thread` + strconv.Itoa(RunID))

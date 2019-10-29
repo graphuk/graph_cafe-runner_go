@@ -51,7 +51,7 @@ func (t *Testpack) unzip(TestpackID int) {
 
 	//unzip zipfile on FS
 	testpackPathUnarchived := fmt.Sprintf(testpackUnarchivedPathTemplate, testpack.ID)
-	check(utils.Unzip(testpackPathArchive, testpackPathUnarchived))
+	check(utils.UnzipWithoutRootFolder(testpackPathArchive, testpackPathUnarchived))
 
 	t.updateStatus(TestpackID, models.TPStatusUnzipInProgress, models.TPStatusReadyForRunning)
 }

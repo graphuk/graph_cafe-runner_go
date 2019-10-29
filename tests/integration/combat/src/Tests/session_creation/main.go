@@ -56,7 +56,7 @@ func main() {
 	server.WaitingForStdOutContains(`http server started on`, time.Second*10)
 	cmdutils.DownloadFile(pwd+`/out/cafe-runner-client.exe`, `http://`+theTest.params.HostName.Value+`/assets/assets/dist/win64/cafe-runner-client.exe`)
 
-	client := cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-success/testcafe`, os.Environ())
+	client := cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-success`, os.Environ())
 
 	server.WaitingForStdErrContains(`Post testpack received.`, time.Second*30)
 	server.WaitingForStdErrContains(`Testpack created with id: 1`, time.Second*10)
@@ -87,7 +87,7 @@ func main() {
 	server.WaitingForStdErrContains(`Run 1. Init finished. Connect for testing.`, time.Second*10)
 	server.WaitingForStdErrContains(`Run 1. Cafe thread finished with exitCode 0`, time.Second*90)
 
-	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-fail/testcafe`, os.Environ())
+	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-fail`, os.Environ())
 	server.WaitingForStdErrContains(`Testpack created with id: 2`, time.Second*10)
 
 	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
@@ -102,7 +102,7 @@ func main() {
 
 	PageResults.CheckCellClassByDeviceNameAndColumn(`test1x`, `2`, `rTableCell rTableStatusFailed`)
 
-	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-success/testcafe`, os.Environ())
+	client = cmdutils.MustStartCmd(pwd+`/out/cafe-runner-client.exe`, []string{`http://127.0.0.1:3133`, `HOSTNAME=http://ya.ru`, `REQUEST=github`, `RESULT_SITE_URL=github.com`}, pwd+`/../../Tests_shared/testcafe-success`, os.Environ())
 	server.WaitingForStdErrContains(`Testpack created with id: 3`, time.Second*10)
 
 	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
