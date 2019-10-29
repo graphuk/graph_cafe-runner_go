@@ -3,7 +3,6 @@ package utils
 import (
 	"archive/zip"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -73,7 +72,6 @@ func UnzipWithoutRootFolder(src, dest string) error {
 		defer rc.Close()
 
 		filename := fixFilenameSlashes(f.Name)
-		log.Println(filename)
 		firstSlashOffset := strings.Index(filename, string(os.PathSeparator))
 		if firstSlashOffset != -1 {
 			filename = filename[firstSlashOffset+1:]
@@ -83,10 +81,8 @@ func UnzipWithoutRootFolder(src, dest string) error {
 		path = fixFilenameSlashes(path)
 
 		if f.FileInfo().IsDir() {
-			log.Println(`folder: ` + path)
 			os.MkdirAll(path, f.Mode())
 		} else {
-			log.Println(`file: ` + path)
 			f, err := os.OpenFile(
 				path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
