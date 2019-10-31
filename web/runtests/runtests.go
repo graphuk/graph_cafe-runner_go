@@ -2,7 +2,8 @@ package runtests
 
 import (
 	"net/http"
-	//	"strconv"
+
+	"github.com/graph-uk/graph_cafe-runner_go/cmd/cafe-runner-server/config"
 
 	"github.com/asdine/storm"
 	"github.com/graph-uk/graph_cafe-runner_go/web/runtests/models"
@@ -11,7 +12,8 @@ import (
 )
 
 type Handler struct {
-	DB *storm.DB
+	DB               *storm.DB
+	CafeRunnerConfig *config.Configuration
 }
 
 func check(err error) {
@@ -21,7 +23,7 @@ func check(err error) {
 }
 
 func (t *Handler) Runtests(c echo.Context) error {
-	model := models.NewRuntestsModel(t.DB)
+	model := models.NewRuntestsModel(t.DB, t.CafeRunnerConfig.Server.ExternalURL)
 	return c.Render(http.StatusOK, `runtests/views/runtests.html`, model)
 }
 

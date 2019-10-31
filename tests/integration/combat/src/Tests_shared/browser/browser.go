@@ -187,6 +187,28 @@ func (t *Browser) GetTextByXpath(xpath string) *[]string {
 	return &res
 }
 
+func (t *Browser) GetValueByXpath(xpath string) *[]string {
+	log.Println(`GetTextByXpath ` + xpath)
+	//panic(`fakePanic`)
+
+	res := []string{}
+
+	timeout(func() {
+		var nodes []*cdp.Node
+
+		check(chromedp.Run(t.ctx,
+			chromedp.Nodes(xpath, &nodes),
+		))
+
+		for _, curNode := range nodes {
+			attr := ``
+			check(chromedp.Run(t.ctx, chromedp.Value(curNode.FullXPath(), &attr)))
+			res = append(res, attr)
+		}
+	}, t.Timeout)
+	return &res
+}
+
 func (t *Browser) GetAttributeValueByXpath(xpath, attr string) *[]string {
 	log.Println(`GetAttributeValueByXpath ` + xpath + ` attr ` + attr)
 	res := []string{}

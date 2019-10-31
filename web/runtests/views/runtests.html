@@ -26,7 +26,7 @@
             background-color: yellow;
         }		
 		
-		.rTableStatusWhite {
+		    .rTableStatusWhite {
             background-color: white;
         }
 		
@@ -183,27 +183,33 @@
 				xhr.send(JSON.stringify({}));
 			}
 
-			function onload() {
+			function onload(externalURL) {
 				nameValue = getCookie("name");
 				if (nameValue!=undefined){
 					document.getElementById('InputName').value = nameValue; 
 				}
-				proceedNameInput();
+				proceedNameInput(externalURL);
 			}
 
-			function proceedNameInput() {
+      function updateLink(externalURL){
+        document.getElementById('Link').value = externalURL+"/testbylink?username="+document.getElementById('InputName').value+"&session="+document.getElementById('SessionSelector').value+"&testpack="+document.getElementById('TestpackSelector').value;
+      }
+
+			function proceedNameInput(externalURL) {
 				var inputVal = document.getElementById('InputName').value;
 				setCookie("name",inputVal);
 				if (inputVal.length>2){
 					document.getElementById('ButtonStart').removeAttribute("disabled");
+          updateLink(externalURL);
+          //
 				}else{
 					document.getElementById('ButtonStart').setAttribute("disabled", "disabled");
 				}
-			}			
+			}	
 		</script>    
 </head>
 
-<body onload="onload();">
+<body onload="onload({{.ExternalURL}});">
     <div class="rTableHeading">
 	    <div class="rTableRow">
 	        <div class="rTableCell rTableStatusWhite"><a href='/runtests'>Run tests</a></div>
@@ -217,7 +223,7 @@
         <div class="rTableStatusCell rTableStatusWhite">Session</div>
         <div class="rTableStatusCell rTableStatusWhite">
           {{if .Sessions}}
-            <select id="SessionSelector">
+            <select id="SessionSelector" onchange="updateLink();">
               {{range .Sessions}}
                 <option value={{.ID}}>{{.TimeAgo}}</option>
           		{{end}}
@@ -232,7 +238,7 @@
         <div class="rTableStatusCell rTableStatusWhite">Testpack</div>
         <div class="rTableStatusCell rTableStatusWhite">
           {{if .Tesptacks}}
-            <select id="TestpackSelector">
+            <select id="TestpackSelector" onchange="updateLink({{.ExternalURL}});">
               {{range .Tesptacks}}
                 <option value={{.ID}}>{{.TimeAgo}}</option>
           		{{end}}
@@ -240,19 +246,25 @@
           {{else}}
             <div>
               Testpacks not exist yet<br>
-              Upload some testpack using <a href="/assets/assets/dist/win64/cafe-runner-client.exe">client</a><br>
-            </div>	
-          {{end}}    
+              Upload some testpack using client for <a href="/assets/assets/dist/win64/cafe-runner-client.exe">Windows</a> or <a href="/assets/assets/dist/linux64/cafe-runner-client">Linux</a>.<br>
+            </div>
+          {{end}}
         </div>
       </div>
       <div class="rTableRow">
         <div class="rTableStatusCell rTableStatusWhite">Name</div>
-        <div class="rTableStatusCell rTableStatusWhite"><input id="InputName" type="text" placeholder="Put your name and device" onkeyup="proceedNameInput();"></div>
+        <div class="rTableStatusCell rTableStatusWhite"><input id="InputName" type="text" placeholder="Put your name and device" onkeyup="proceedNameInput({{.ExternalURL}});"></div>
+      </div>
+      <div class="rTableRow">
+        <div class="rTableStatusCell rTableStatusWhite">Link</div>
+        <div class="rTableStatusCell rTableStatusWhite">
+          <input id="Link" disabled type="text">
+        </div>
       </div>
 	  </div>
     {{if and .Tesptacks .Sessions}}
-      <button id="ButtonStart" type="button" disabled onclick="proceedStartButton();">Start testing</button>		
-    {{end}}			
+      <button id="ButtonStart" type="button" disabled onclick="proceedStartButton();">Start testing</button>
+    {{end}}
 </body>
 
 </html>	
