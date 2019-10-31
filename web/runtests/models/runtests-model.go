@@ -20,8 +20,9 @@ type sessionRec struct {
 }
 
 type runtestsModel struct {
-	Sessions  []sessionRec
-	Tesptacks []testpackRec
+	Sessions    []sessionRec
+	Tesptacks   []testpackRec
+	ExternalURL string
 }
 
 //return duration like 14h27m5s
@@ -34,7 +35,7 @@ func timeAgoHumanString(now, moment time.Time) string {
 	return res
 }
 
-func NewRuntestsModel(DB *storm.DB) *runtestsModel {
+func NewRuntestsModel(DB *storm.DB, externalURL string) *runtestsModel {
 	res := &runtestsModel{}
 	now := time.Now()
 
@@ -47,6 +48,8 @@ func NewRuntestsModel(DB *storm.DB) *runtestsModel {
 	for _, curTestpack := range *allTestpacks {
 		res.Tesptacks = append(res.Tesptacks, testpackRec{curTestpack.ID, timeAgoHumanString(now, curTestpack.UploadTime)})
 	}
+
+	res.ExternalURL = externalURL
 
 	return res
 }

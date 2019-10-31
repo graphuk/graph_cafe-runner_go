@@ -20,6 +20,7 @@ import (
 	webruns "github.com/graph-uk/graph_cafe-runner_go/web/runs"
 	webruntests "github.com/graph-uk/graph_cafe-runner_go/web/runtests"
 	websessions "github.com/graph-uk/graph_cafe-runner_go/web/sessions"
+	webtestbylink "github.com/graph-uk/graph_cafe-runner_go/web/testbylink"
 	webtestpacks "github.com/graph-uk/graph_cafe-runner_go/web/testpacks"
 
 	"github.com/labstack/echo"
@@ -89,8 +90,9 @@ func (t *CafeRunnerServer) Start() {
 	e.GET("/testpacks/:id", (&webtestpacks.Handler{db}).Testpack)
 	e.GET("/sessions/:id", (&websessions.Handler{db}).Session)
 	e.GET("/runs/:id", (&webruns.Handler{db, &t.config.Server.Hostname}).Run)
-	e.GET("/runtests", (&webruntests.Handler{db}).Runtests)
+	e.GET("/runtests", (&webruntests.Handler{db, t.config}).Runtests)
 	e.GET("/results", (&webresults.Handler{db}).Results)
+	e.GET("/testbylink", (&webtestbylink.Handler{}).TestByLink)
 
 	//api
 	e.POST("/api/v1/testpacks", (&testpacks.Handler{db}).Post)

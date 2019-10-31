@@ -25,3 +25,12 @@ func (t *PageRuntests) FillDeviceOwnerName(value string) {
 func (t *PageRuntests) ClickStartTesting() {
 	t.Bro.ClickByXpath(`//button`)
 }
+
+func (t *PageRuntests) GetTestLink() string {
+	res := ``
+	text := t.Bro.GetValueByXpath(`//input[@id="Link"]`)
+	if len(*text) > 0 {
+		res = (*text)[0]
+	}
+	return res
+}
