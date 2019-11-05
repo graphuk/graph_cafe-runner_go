@@ -18,7 +18,7 @@ func check(err error) {
 }
 
 func (t *Handler) TestByLink(c echo.Context) error {
-	model := models.NewRuntestsModel(c.QueryParam("session"), c.QueryParam("testpack"), c.QueryParam("name"))
+	model := models.NewRuntestsModel(c.QueryParam("session"), c.QueryParam("testpack"), c.QueryParam("username"))
 	log.Println(c.Render(http.StatusOK, `testbylink/views/testbylink.html`, model))
 	return c.Render(http.StatusOK, `testbylink/views/testbylink.html`, model)
 }
