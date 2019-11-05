@@ -75,4 +75,9 @@ func main() {
 	PageRuntests.Bro.Get(link)
 
 	server.WaitingForStdErrContains(`Run 1. Cafe thread finished with exitCode 0`, time.Second*90)
+
+	PageRuntests = cafeRunnerWeb.OpenPageRuntests()
+	PageResults := PageRuntests.PartHeader.ClickResults()
+
+	PageResults.CheckCellClassByDeviceNameAndColumn(`test1`, `2`, `rTableCell rTableStatusSuccess`)
 }
